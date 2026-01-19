@@ -7,38 +7,78 @@
     <style>
         :root { --s-blue: #035efc; --s-bg: #f2f4f7; --s-card: #ffffff; --radius: 32px; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--s-bg); color: #1d1d1f; line-height: 1.6; }
-        header { background: #fff; padding: 20px 25px; display: flex; align-items: center; position: sticky; top: 0; border-bottom: 1px solid #eee; }
+        header { background: #fff; padding: 20px 25px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
         .back-link { text-decoration: none; color: var(--s-blue); font-size: 1.5em; margin-right: 20px; }
         .container { padding: 20px; max-width: 650px; margin: 0 auto; }
-        .card { background: var(--s-card); padding: 30px; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .theory-box { background: #f8f9ff; padding: 20px; border-radius: 24px; border-left: 6px solid var(--s-blue); margin: 20px 0; font-weight: bold; text-align: center; }
-        .example-box { background: #fff9f0; padding: 20px; border-radius: 24px; border-left: 6px solid #ff9500; margin: 20px 0; }
+        .card { background: var(--s-card); padding: 30px; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        
+        h1 { font-size: 1.6em; color: var(--s-blue); margin-bottom: 20px; border-left: 5px solid var(--s-blue); padding-left: 15px; }
+        
+        .step { background: #f8f9ff; padding: 15px; border-radius: 20px; margin-bottom: 10px; display: flex; align-items: flex-start; }
+        .step-num { background: var(--s-blue); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; font-size: 0.8em; font-weight: bold; }
+        
+        /* Стилизация столбика */
+        .math-column {
+            font-family: 'Courier New', monospace;
+            background: #252525;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 20px;
+            line-height: 1.2;
+            display: inline-block;
+            margin: 10px 0;
+            letter-spacing: 2px;
+        }
+        
+        .highlight-box { background: #fff4e5; padding: 15px; border-radius: 20px; border: 1px dashed #ff9500; margin-top: 15px; }
     </style>
 </head>
 <body>
+
 <header>
     <a href="theory_main.html" class="back-link">←</a>
     <div style="font-weight: 700;">Умножение и деление</div>
 </header>
+
 <div class="container">
     <div class="card">
-        <h2>1. Умножение</h2>
-        <div class="theory-box">Множитель × Множитель = Произведение</div>
-        <div class="example-box">
-            <strong>Пример:</strong><br>
-            5 игровых наборов по 40 у.е. <br>
-            40 × 5 = 200 у.е.
+        <h1>Как работает умножение</h1>
+        <p>Это замена сложения. Если у тебя 4 коробки по 10 у.е., ты не считаешь 10+10+10+10, ты просто делаешь 10 × 4.</p>
+        
+        <div class="step"><div class="step-num">1</div><span>Определи первый множитель (что повторяем)</span></div>
+        <div class="step"><div class="step-num">2</div><span>Определи второй множитель (сколько раз)</span></div>
+        
+        <div class="highlight-box">
+            <b>Важно:</b> От перемены мест множителей сумма (результат) не меняется! <br>
+            <i>5 × 2 у.е. = 2 × 5 у.е.</i>
         </div>
     </div>
+
     <div class="card">
-        <h2>2. Деление</h2>
-        <div class="theory-box">Делимое : Делитель = Частное</div>
-        <div class="example-box">
-            <strong>Пример:</strong><br>
-            150 у.е. делим на 3 человека. <br>
-            150 : 3 = 50 у.е.
+        <h1>Деление столбиком</h1>
+        <p>Когда число слишком большое, чтобы поделить его в уме, мы используем «уголок».</p>
+        
+        <div style="text-align: center;">
+            <div class="math-column">
+                &nbsp;256 | 4<br>
+                -24&nbsp;&nbsp;|---<br>
+                ---&nbsp;&nbsp;|&nbsp;64<br>
+                &nbsp;16<br>
+                -16<br>
+                ---<br>
+                &nbsp;&nbsp;0
+            </div>
+        </div>
+
+        <div class="step"><div class="step-num">1</div><span>Берем первое число (2 на 4 не делится, берем 25).</span></div>
+        <div class="step"><div class="step-num">2</div><span>В 25 число 4 помещается 6 раз (4×6=24).</span></div>
+        <div class="step"><div class="step-num">3</div><span>Вычитаем 24 из 25, остаток 1. Сносим шестерку...</span></div>
+        
+        <div class="highlight-box">
+            <strong>Результат:</strong> 256 : 4 = 64 у.е.
         </div>
     </div>
 </div>
+
 </body>
 </html>
