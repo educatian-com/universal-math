@@ -5,87 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Натуральные числа — Universal Math</title>
     <style>
-        :root {
-            --s-blue: #035efc;
-            --s-bg: #f2f4f7;
-            --s-card: #ffffff;
-            --radius: 32px;
-        }
+        :root { --s-blue: #035efc; --s-bg: #f2f4f7; --s-card: #ffffff; --radius: 32px; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--s-bg); color: #1d1d1f; line-height: 1.6; }
-        
-        header {
-            background: #fff;
-            padding: 20px 25px;
-            display: flex;
-            align-items: center;
-            position: sticky; top: 0; z-index: 100;
-            border-bottom: 1px solid #eee;
-        }
+        header { background: #fff; padding: 20px 25px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
         .back-link { text-decoration: none; color: var(--s-blue); font-size: 1.5em; margin-right: 20px; }
-
         .container { padding: 20px; max-width: 650px; margin: 0 auto; }
+        .card { background: var(--s-card); padding: 30px; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; }
         
-        .card { 
-            background: var(--s-card); 
-            padding: 30px; 
-            border-radius: var(--radius); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            margin-bottom: 20px; 
+        h1 { font-size: 1.6em; color: var(--s-blue); margin-bottom: 20px; border-left: 5px solid var(--s-blue); padding-left: 15px; }
+        
+        /* Таблица разрядов */
+        .ranks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #f8f9ff;
+            border-radius: 20px;
+            overflow: hidden;
         }
-
-        h1 { font-size: 1.8em; color: var(--s-blue); margin-top: 0; letter-spacing: -1px; }
-        h2 { font-size: 1.3em; margin-bottom: 15px; }
-
-        .theory-box { 
-            background: #f8f9ff; 
-            padding: 20px; 
-            border-radius: 24px; 
-            border-left: 6px solid var(--s-blue); 
-            margin: 20px 0; 
-        }
-
-        .example-box { 
-            background: #f0fdf4; 
-            padding: 20px; 
-            border-radius: 24px; 
-            border-left: 6px solid #2ecc71; 
-            margin: 20px 0; 
-        }
-
-        .highlight { color: var(--s-blue); font-weight: bold; }
+        .ranks-table th { background: var(--s-blue); color: #fff; padding: 12px; font-size: 0.9em; }
+        .ranks-table td { padding: 15px; text-align: center; border: 1px solid #e0e7ff; font-weight: bold; font-size: 1.2em; }
+        
+        .step { background: #f0fdf4; padding: 15px; border-radius: 20px; margin-bottom: 10px; display: flex; align-items: center; }
+        .step-dot { width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 12px; }
+        
+        .badge { background: #e0e7ff; color: var(--s-blue); padding: 4px 12px; border-radius: 10px; font-size: 0.8em; font-weight: 700; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <header>
     <a href="theory_main.html" class="back-link">←</a>
-    <div style="font-weight: 700; font-size: 1.1em;">Тема: Натуральные числа</div>
+    <div style="font-weight: 700;">Натуральные числа</div>
 </header>
 
 <div class="container">
     <div class="card">
-        <h1>Что такое натуральные числа?</h1>
-        <p>Это те числа, которые мы используем для <span class="highlight">счёта предметов</span> в повседневной жизни.</p>
+        <span class="badge">Определение</span>
+        <h1>Что мы считаем?</h1>
+        <p>Натуральные числа — это те, что мы используем для счета предметов (1, 2, 3...).</p>
         
-        <div class="theory-box">
-            Ряд натуральных чисел: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ...
-        </div>
-
-        <div class="example-box">
-    <strong>🌟 Пример:</strong><br>
-    Представь, что ты считаешь лайки под постом: 1, 2, 3... Ты используешь натуральные числа. <br>
-    Но если лайков нет вообще, мы ставим 0. В математике <b>0</b> означает отсутствие, поэтому он не входит в счет предметов и не является натуральным.
-</div>
-
+        <div class="step"><div class="step-dot"></div><span>Начинаются с <b>1</b></span></div>
+        <div class="step"><div class="step-dot"></div><span>Нет самого большого числа</span></div>
+        <div class="step" style="background: #fff0f0;"><div class="step-dot" style="background: #ff4d4d;"></div><span><b>0</b> — не натуральное число</span></div>
     </div>
 
+    [attachment_0](attachment)
+
     <div class="card">
-        <h2>Важные особенности</h2>
-        <ul>
-            <li>Самое маленькое натуральное число — <span class="highlight">1</span>.</li>
-            <li>Самого большого числа не существует, ряд <span class="highlight">бесконечен</span>.</li>
-            <li><strong>Ноль (0)</strong> — <span style="color:red">не является</span> натуральным числом, так как мы не начинаем счёт с нуля.</li>
-        </ul>
+        <span class="badge">Структура</span>
+        <h1>Разряды числа</h1>
+        <p>Любое большое число можно разложить на "кирпичики". Рассмотрим число <span style="color: var(--s-blue); font-weight: bold;">358 у.е.</span></p>
+        
+        <table class="ranks-table">
+            <tr>
+                <th>Сотни</th>
+                <th>Десятки</th>
+                <th>Единицы</th>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>5</td>
+                <td>8</td>
+            </tr>
+        </table>
+
+        <div style="background: #f8f9ff; padding: 15px; border-radius: 20px; font-size: 0.9em;">
+            • <b>3 сотни</b> (300 у.е.)<br>
+            • <b>5 десятков</b> (50 у.е.)<br>
+            • <b>8 единиц</b> (8 у.е.)
+        </div>
     </div>
 </div>
 
