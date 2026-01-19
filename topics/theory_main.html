@@ -17,6 +17,7 @@
             background: #fff;
             padding: 40px 25px 20px;
             position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid #eee;
         }
         .back-btn { text-decoration: none; color: var(--s-blue); font-size: 1.1em; font-weight: 600; display: block; margin-bottom: 10px; }
         h1 { font-size: 2.2em; margin: 0; letter-spacing: -1px; }
@@ -26,7 +27,7 @@
         /* Карточки тем в стиле S25 */
         .topic-link {
             background: var(--s-card);
-            padding: 25px;
+            padding: 22px;
             border-radius: var(--radius);
             margin-bottom: 15px;
             display: flex;
@@ -34,51 +35,54 @@
             text-decoration: none;
             color: inherit;
             box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-            transition: transform 0.2s;
+            transition: transform 0.2s, background 0.2s;
         }
         .topic-link:active { transform: scale(0.97); background: #fafafa; }
         
         .icon-box {
-            width: 50px; height: 50px; border-radius: 18px;
+            width: 56px; height: 56px; border-radius: 20px;
             background: #f0f4ff; color: var(--s-blue);
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.5em; margin-right: 20px;
+            font-size: 1.6em; margin-right: 18px;
+            flex-shrink: 0;
         }
-        .topic-info b { display: block; font-size: 1.2em; margin-bottom: 4px; }
-        .topic-info span { color: #8e8e93; font-size: 0.9em; }
+        .topic-info b { display: block; font-size: 1.15em; margin-bottom: 3px; }
+        .topic-info span { color: #8e8e93; font-size: 0.9em; line-height: 1.2; }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="../index.html" class="back-btn">← Назад</a>
+    <a href="../index.html" class="back-btn">← На главную</a>
     <h1>Теория</h1>
 </header>
 
 <div class="container">
+    
     <a href="numbers.html" class="topic-link">
         <div class="icon-box">🔢</div>
         <div class="topic-info">
             <b>Натуральные числа</b>
-            <span>Основы счета, разряды и классы</span>
+            <span>Основы счета и правила использования цифр</span>
         </div>
     </a>
 
-    <a href="fractions.html" class="topic-link">
-        <div class="icon-box">🍰</div>
+    <a href="arithmetic.html" class="topic-link">
+        <div class="icon-box">➕</div>
         <div class="topic-info">
-            <b>Дроби</b>
-            <span>Обыкновенные и десятичные</span>
+            <b>Сложение и вычитание</b>
+            <span>Разбор действий на жизненных примерах</span>
         </div>
     </a>
 
-    <a href="equations.html" class="topic-link">
-        <div class="icon-box">⚖️</div>
+    <a href="#" class="topic-link" style="opacity: 0.7;">
+        <div class="icon-box">✖️</div>
         <div class="topic-info">
-            <b>Уравнения</b>
-            <span>Линейные и квадратные</span>
+            <b>Умножение и деление</b>
+            <span>Скоро добавим новый материал</span>
         </div>
     </a>
+
 </div>
 
 </body>
