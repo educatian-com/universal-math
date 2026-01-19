@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Теория — Universal Math</title>
+    <style>
+        :root {
+            --s-blue: #035efc;
+            --s-bg: #f2f4f7;
+            --s-card: #ffffff;
+            --radius: 32px;
+        }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--s-bg); color: #1d1d1f; }
+        
+        header {
+            background: #fff;
+            padding: 40px 25px 20px;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .back-btn { text-decoration: none; color: var(--s-blue); font-size: 1.1em; font-weight: 600; display: block; margin-bottom: 10px; }
+        h1 { font-size: 2.2em; margin: 0; letter-spacing: -1px; }
+
+        .container { padding: 20px; max-width: 600px; margin: 0 auto; }
+        
+        /* Карточки тем в стиле S25 */
+        .topic-link {
+            background: var(--s-card);
+            padding: 25px;
+            border-radius: var(--radius);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            transition: transform 0.2s;
+        }
+        .topic-link:active { transform: scale(0.97); background: #fafafa; }
+        
+        .icon-box {
+            width: 50px; height: 50px; border-radius: 18px;
+            background: #f0f4ff; color: var(--s-blue);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5em; margin-right: 20px;
+        }
+        .topic-info b { display: block; font-size: 1.2em; margin-bottom: 4px; }
+        .topic-info span { color: #8e8e93; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="../index.html" class="back-btn">← Назад</a>
+    <h1>Теория</h1>
+</header>
+
+<div class="container">
+    <a href="numbers.html" class="topic-link">
+        <div class="icon-box">🔢</div>
+        <div class="topic-info">
+            <b>Натуральные числа</b>
+            <span>Основы счета, разряды и классы</span>
+        </div>
+    </a>
+
+    <a href="fractions.html" class="topic-link">
+        <div class="icon-box">🍰</div>
+        <div class="topic-info">
+            <b>Дроби</b>
+            <span>Обыкновенные и десятичные</span>
+        </div>
+    </a>
+
+    <a href="equations.html" class="topic-link">
+        <div class="icon-box">⚖️</div>
+        <div class="topic-info">
+            <b>Уравнения</b>
+            <span>Линейные и квадратные</span>
+        </div>
+    </a>
+</div>
+
+</body>
+</html>
