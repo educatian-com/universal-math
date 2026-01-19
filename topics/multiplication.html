@@ -11,74 +11,58 @@
         .back-link { text-decoration: none; color: var(--s-blue); font-size: 1.5em; margin-right: 20px; }
         .container { padding: 20px; max-width: 650px; margin: 0 auto; }
         .card { background: var(--s-card); padding: 30px; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        
         h1 { font-size: 1.6em; color: var(--s-blue); margin-bottom: 20px; border-left: 5px solid var(--s-blue); padding-left: 15px; }
         
-        .step { background: #f8f9ff; padding: 15px; border-radius: 20px; margin-bottom: 10px; display: flex; align-items: flex-start; }
-        .step-num { background: var(--s-blue); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; font-size: 0.8em; font-weight: bold; }
-        
-        /* Стилизация столбика */
+        /* Исправленный столбик */
         .math-column {
-            font-family: 'Courier New', monospace;
-            background: #252525;
-            color: #00ff00;
-            padding: 20px;
-            border-radius: 20px;
+            font-family: "Times New Roman", Times, serif;
+            font-style: italic;
+            background: #ffffff;
+            color: #1d1d1f;
+            padding: 25px;
+            border-radius: 24px;
+            border: 1px solid #e0e0e0;
             line-height: 1.2;
             display: inline-block;
-            margin: 10px 0;
-            letter-spacing: 2px;
+            font-size: 1.3em;
+            letter-spacing: 3px;
         }
-        
-        .highlight-box { background: #fff4e5; padding: 15px; border-radius: 20px; border: 1px dashed #ff9500; margin-top: 15px; }
+
+        .step { background: #f8f9ff; padding: 15px; border-radius: 20px; margin-bottom: 10px; display: flex; align-items: flex-start; }
+        .step-num { background: var(--s-blue); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; font-size: 0.8em; font-weight: bold; }
     </style>
 </head>
 <body>
-
 <header>
     <a href="theory_main.html" class="back-link">←</a>
     <div style="font-weight: 700;">Умножение и деление</div>
 </header>
-
 <div class="container">
     <div class="card">
         <h1>Как работает умножение</h1>
-        <p>Это замена сложения. Если у тебя 4 коробки по 10 у.е., ты не считаешь 10+10+10+10, ты просто делаешь 10 × 4.</p>
-        
-        <div class="step"><div class="step-num">1</div><span>Определи первый множитель (что повторяем)</span></div>
-        <div class="step"><div class="step-num">2</div><span>Определи второй множитель (сколько раз)</span></div>
-        
-        <div class="highlight-box">
-            <b>Важно:</b> От перемены мест множителей сумма (результат) не меняется! <br>
-            <i>5 × 2 у.е. = 2 × 5 у.е.</i>
-        </div>
+        <p>Умножение заменяет сложение одинаковых чисел.</p>
+        <div class="step"><div class="step-num">1</div><span><b>4 × 10</b> — это число 10, взятое 4 раза.</span></div>
+        <div class="step"><div class="step-num">2</div><span>Результат умножения называется <i>произведением</i>.</span></div>
     </div>
 
     <div class="card">
         <h1>Деление столбиком</h1>
-        <p>Когда число слишком большое, чтобы поделить его в уме, мы используем «уголок».</p>
+        <p>Пример записи деления «уголком»:</p>
         
-        <div style="text-align: center;">
+        <div style="text-align: center; margin: 20px 0;">
             <div class="math-column">
-                &nbsp;256 | 4<br>
-                -24&nbsp;&nbsp;|---<br>
-                ---&nbsp;&nbsp;|&nbsp;64<br>
+                256 | <u>&nbsp;4&nbsp;&nbsp;</u><br>
+                <u>24</u>&nbsp; | 64<br>
                 &nbsp;16<br>
-                -16<br>
-                ---<br>
+                &nbsp;<u>16</u><br>
                 &nbsp;&nbsp;0
             </div>
         </div>
 
-        <div class="step"><div class="step-num">1</div><span>Берем первое число (2 на 4 не делится, берем 25).</span></div>
-        <div class="step"><div class="step-num">2</div><span>В 25 число 4 помещается 6 раз (4×6=24).</span></div>
-        <div class="step"><div class="step-num">3</div><span>Вычитаем 24 из 25, остаток 1. Сносим шестерку...</span></div>
-        
-        <div class="highlight-box">
-            <strong>Результат:</strong> 256 : 4 = 64 у.е.
-        </div>
+        <div class="step"><div class="step-num">1</div><span>Делим 25 на 4, берем по 6.</span></div>
+        <div class="step"><div class="step-num">2</div><span>Остаток 1, сносим 6, получаем 16.</span></div>
+        <div class="step"><div class="step-num">3</div><span>16 делим на 4, берем по 4. Итог: <b>64</b>.</span></div>
     </div>
 </div>
-
 </body>
 </html>
