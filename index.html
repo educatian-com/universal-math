@@ -15,6 +15,53 @@
             --s-gray: #8e8e93;
             --radius: 30px;
         }
+<style>
+:root {
+    /* Твои старые переменные здесь (цвета, радиусы) */
+    --s-blue: #035efc;
+    --s-bg: #f2f4f7;
+}
+
+/* ДОБАВЬ ЭТО СРАЗУ ПОСЛЕ :root */
+
+#menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+}
+
+#menu a {
+    display: flex;          /* Выстраивает иконку и текст в ряд */
+    align-items: center;     /* Центрирует их по вертикали */
+    gap: 16px;               /* Расстояние между пазлом и словом Практика */
+    padding: 18px 25px;
+    background: #ffffff;
+    border-radius: 28px;     /* Закругление как в One UI */
+    text-decoration: none;
+    color: #1d1d1f;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    transition: transform 0.2s;
+}
+
+#menu a:active {
+    transform: scale(0.96); /* Эффект нажатия */
+}
+
+.icon-box {
+    width: 44px;
+    height: 44px;
+    background: #f2f4f7;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;         /* Чтобы иконка не сплющивалась */
+}
+</style>
 
         body {
             font-family: 'Segoe UI', Roboto, sans-serif;
@@ -113,11 +160,10 @@
     <a href="#" onclick="showSection('home')">🏠 Главная</a>
     <a href="topics/theory_main.html">📚 Теория</a>
     <a href="#" onclick="showSection('formulas')">📐 Формулы</a>
-    <a href="practice/practice_main.html" class="menu-item">
-    <div class="icon-box bg-green">🧩</div>
-    <div>
-        <div class="title">Практика</div>
-    </div>
+    
+<a href="practice/practice_main.html" class="menu-item">
+    <div class="icon-box bg-green" style="flex-shrink: 0;">🧩</div>
+    <div class="title" style="margin: 0; white-space: nowrap;">Практика</div>
 </a>
 
 
