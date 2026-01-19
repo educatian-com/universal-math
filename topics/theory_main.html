@@ -26,9 +26,9 @@
         
         .topic-link {
             background: var(--s-card);
-            padding: 22px;
+            padding: 18px 22px; /* Чуть уменьшил отступы для компактности */
             border-radius: var(--radius);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             text-decoration: none;
@@ -39,14 +39,13 @@
         .topic-link:active { transform: scale(0.97); }
         
         .icon-box {
-            width: 56px; height: 56px; border-radius: 20px;
+            width: 48px; height: 48px; border-radius: 16px;
             background: #f0f4ff; color: var(--s-blue);
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.6em; margin-right: 18px;
+            font-size: 1.4em; margin-right: 18px;
             flex-shrink: 0;
         }
-        .topic-info b { display: block; font-size: 1.15em; margin-bottom: 3px; }
-        .topic-info span { color: #8e8e93; font-size: 0.9em; }
+        .topic-info b { font-size: 1.2em; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -60,26 +59,17 @@
     
     <a href="numbers.html" class="topic-link">
         <div class="icon-box">🔢</div>
-        <div class="topic-info">
-            <b>Натуральные числа</b>
-            <span>Основы счета и правила</span>
-        </div>
+        <div class="topic-info"><b>Натуральные числа</b></div>
     </a>
 
     <a href="arithmetic.html" class="topic-link">
         <div class="icon-box">➕</div>
-        <div class="topic-info">
-            <b>Сложение и вычитание</b>
-            <span>Расчеты в у.е.</span>
-        </div>
+        <div class="topic-info"><b>Сложение и вычитание</b></div>
     </a>
 
     <a href="multiplication.html" class="topic-link">
         <div class="icon-box">✖️</div>
-        <div class="topic-info">
-            <b>Умножение и деление</b>
-            <span>Работа с группами в у.е.</span>
-        </div>
+        <div class="topic-info"><b>Умножение и деление</b></div>
     </a>
 
 </div>
