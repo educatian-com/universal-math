@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Натуральные числа — Universal Math</title>
+    <style>
+        :root {
+            --s-blue: #035efc;
+            --s-bg: #f2f4f7;
+            --s-card: #ffffff;
+            --radius: 32px;
+        }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--s-bg); color: #1d1d1f; line-height: 1.6; }
+        
+        header {
+            background: #fff;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid #eee;
+        }
+        .back-link { text-decoration: none; color: var(--s-blue); font-size: 1.5em; margin-right: 20px; }
+
+        .container { padding: 20px; max-width: 650px; margin: 0 auto; }
+        
+        .card { 
+            background: var(--s-card); 
+            padding: 30px; 
+            border-radius: var(--radius); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; 
+        }
+
+        h1 { font-size: 1.8em; color: var(--s-blue); margin-top: 0; letter-spacing: -1px; }
+        h2 { font-size: 1.3em; margin-bottom: 15px; }
+
+        .theory-box { 
+            background: #f8f9ff; 
+            padding: 20px; 
+            border-radius: 24px; 
+            border-left: 6px solid var(--s-blue); 
+            margin: 20px 0; 
+        }
+
+        .example-box { 
+            background: #f0fdf4; 
+            padding: 20px; 
+            border-radius: 24px; 
+            border-left: 6px solid #2ecc71; 
+            margin: 20px 0; 
+        }
+
+        .highlight { color: var(--s-blue); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="theory_main.html" class="back-link">←</a>
+    <div style="font-weight: 700; font-size: 1.1em;">Тема: Натуральные числа</div>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h1>Что такое натуральные числа?</h1>
+        <p>Это те числа, которые мы используем для <span class="highlight">счёта предметов</span> в повседневной жизни.</p>
+        
+        <div class="theory-box">
+            Ряд натуральных чисел: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ...
+        </div>
+
+        <div class="example-box">
+            <strong>📝 Примеры из SpaceMath:</strong><br>
+            • 5 яблок на столе — натуральное число.<br>
+            • 25 учеников в классе — натуральное число.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Важные особенности</h2>
+        <ul>
+            <li>Самое маленькое натуральное число — <span class="highlight">1</span>.</li>
+            <li>Самого большого числа не существует, ряд <span class="highlight">бесконечен</span>.</li>
+            <li><strong>Ноль (0)</strong> — <span style="color:red">не является</span> натуральным числом, так как мы не начинаем счёт с нуля.</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
