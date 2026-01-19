@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -15,53 +14,6 @@
             --s-gray: #8e8e93;
             --radius: 30px;
         }
-<style>
-:root {
-    /* Твои старые переменные здесь (цвета, радиусы) */
-    --s-blue: #035efc;
-    --s-bg: #f2f4f7;
-}
-
-/* ДОБАВЬ ЭТО СРАЗУ ПОСЛЕ :root */
-
-#menu {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 20px;
-}
-
-#menu a {
-    display: flex;          /* Выстраивает иконку и текст в ряд */
-    align-items: center;     /* Центрирует их по вертикали */
-    gap: 16px;               /* Расстояние между пазлом и словом Практика */
-    padding: 18px 25px;
-    background: #ffffff;
-    border-radius: 28px;     /* Закругление как в One UI */
-    text-decoration: none;
-    color: #1d1d1f;
-    font-weight: 700;
-    font-size: 1.1rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-    transition: transform 0.2s;
-}
-
-#menu a:active {
-    transform: scale(0.96); /* Эффект нажатия */
-}
-
-.icon-box {
-    width: 44px;
-    height: 44px;
-    background: #f2f4f7;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    flex-shrink: 0;         /* Чтобы иконка не сплющивалась */
-}
-</style>
 
         body {
             font-family: 'Segoe UI', Roboto, sans-serif;
@@ -89,25 +41,55 @@
         .burger { cursor: pointer; display: flex; flex-direction: column; gap: 6px; }
         .burger span { display: block; width: 26px; height: 3px; background: white; border-radius: 10px; }
 
-        /* Навигация */
+        /* Навигация (Боковое меню) */
         nav {
             position: fixed;
             top: 0;
             right: -100%;
-            width: 280px;
+            width: 300px;
             height: 100%;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(15px);
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            padding: 100px 30px;
-            gap: 25px;
+            padding: 80px 20px;
+            gap: 12px;
             z-index: 1050;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
         }
 
         nav.active { right: 0; }
-        nav a { text-decoration: none; color: var(--s-text); font-size: 1.3em; font-weight: 600; }
+
+        /* Стили для ссылок в меню, чтобы они были в ряд */
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: var(--s-text);
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            transition: 0.2s;
+        }
+
+        nav a:active { transform: scale(0.96); background: #eee; }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
 
         /* Основные блоки */
         .section { display: none; padding: 25px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.4s; }
@@ -125,8 +107,7 @@
         }
 
         h1 { font-size: 2em; margin-bottom: 15px; letter-spacing: -1px; }
-        p { line-height: 1.6; color: #444; }
-
+        
         .btn {
             background: var(--s-blue);
             color: white;
@@ -140,11 +121,7 @@
             transition: 0.3s;
         }
 
-        .btn:active { transform: scale(0.96); background: #024bc9; }
-
-        /* Стили разделов */
         .topic-card { text-align: left; border-left: 6px solid var(--s-blue); cursor: pointer; margin-bottom: 15px; }
-        .formula-item { background: #f8f9ff; padding: 15px; border-radius: 18px; margin: 10px 0; text-align: left; }
     </style>
 </head>
 <body>
@@ -157,67 +134,33 @@
 </header>
 
 <nav id="menu">
-    <a href="#" onclick="showSection('home')">🏠 Главная</a>
-    <a href="topics/theory_main.html">📚 Теория</a>
-    <a href="#" onclick="showSection('formulas')">📐 Формулы</a>
+    <a href="#" onclick="showSection('home')">
+        <div class="icon-box">🏠</div> <span>Главная</span>
+    </a>
     
-<a href="practice/practice_main.html" class="menu-item">
-    <div class="icon-box bg-green" style="flex-shrink: 0;">🧩</div>
-    <div class="title" style="margin: 0; white-space: nowrap;">Практика</div>
-</a>
+    <a href="topics/theory_main.html">
+        <div class="icon-box">📚</div> <span>Теория</span>
+    </a>
 
+    <a href="#" onclick="showSection('formulas')">
+        <div class="icon-box">📐</div> <span>Формулы</span>
+    </a>
+    
+    <a href="practice/practice_main.html">
+        <div class="icon-box" style="background: #e9fbee;">🧩</div>
+        <span style="white-space: nowrap;">Практика</span>
+    </a>
 
-    <a href="#" onclick="showSection('calc')">🧮 Калькуляторы</a>
+    <a href="#" onclick="showSection('calc')">
+        <div class="icon-box">🧮</div> <span>Калькуляторы</span>
+    </a>
 </nav>
 
 <div id="home" class="section active">
     <div class="card">
         <h1>Добро пожаловать</h1>
-        <p>Universal Math — это современный образовательный портал, созданный для того, чтобы сделать изучение математики простым и доступным.</p>
-        <p>Здесь вы найдете теоретические материалы, важные формулы и интерактивные тренажеры для отработки навыков.</p>
-        <br>
+        <p>Universal Math — это современный образовательный портал для изучения математики.</p>
         <button class="btn" onclick="toggleMenu()">Открыть меню</button>
-    </div>
-</div>
-
-<div id="theory" class="section">
-    <div id="theory-list">
-        <h2>Темы обучения</h2>
-        <div class="card topic-card" onclick="openTopic('t1')">
-            <strong>Натуральные числа</strong>
-            <p style="font-size:0.8em; margin:5px 0 0;">Основы счета и свойства чисел.</p>
-        </div>
-        <div class="card topic-card" onclick="openTopic('t2')" style="border-left-color: var(--s-purple);">
-            <strong>Дроби</strong>
-            <p style="font-size:0.8em; margin:5px 0 0;">Понятие частей и десятичные дроби.</p>
-        </div>
-    </div>
-    
-    <div id="topic-content" style="display:none;">
-        <button onclick="closeTopic()" style="background:none; border:none; color:var(--s-blue); font-weight:bold; cursor:pointer; margin-bottom:15px;">← Назад к темам</button>
-        <div id="t1" class="topic-detail" style="display:none;">
-            <div class="card">
-                <h3>Натуральные числа</h3>
-                <div class="formula-item">Числа, используемые при счете предметов, называются натуральными.</div>
-            </div>
-        </div>
-        <div id="t2" class="topic-detail" style="display:none;">
-            <div class="card">
-                <h3>Дроби</h3>
-                <div class="formula-item">Дробь — это число, состоящее из одной или нескольких равных частей единицы.</div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="practice" class="section">
-    <div class="card">
-        <h2>Тренажер</h2>
-        <div id="quest" style="font-size: 3em; font-weight: 800; margin: 20px 0;">7 × 8 = ?</div>
-        <input type="number" id="ans" placeholder="Ответ" style="width: 80%; padding: 15px; border-radius: 15px; border: 2px solid #eee; text-align: center; font-size: 1.5em; margin-bottom: 20px;">
-        <button class="btn" onclick="check()">Проверить</button>
-        <button class="btn" id="next" style="display:none; background:#2ecc71; margin-top:10px;" onclick="newQuest()">Следующий</button>
-        <p id="res" style="font-weight:bold; margin-top:15px;"></p>
     </div>
 </div>
 
@@ -232,40 +175,6 @@
         document.getElementById(id).classList.add('active');
         document.getElementById('menu').classList.remove('active');
         window.scrollTo(0,0);
-    }
-
-    function openTopic(id) {
-        document.getElementById('theory-list').style.display = 'none';
-        document.getElementById('topic-content').style.display = 'block';
-        document.querySelectorAll('.topic-detail').forEach(d => d.style.display = 'none');
-        document.getElementById(id).style.display = 'block';
-    }
-
-    function closeTopic() {
-        document.getElementById('theory-list').style.display = 'block';
-        document.getElementById('topic-content').style.display = 'none';
-    }
-
-    // Тренажер
-    let rightAns = 56;
-    function newQuest() {
-        const n1 = Math.floor(Math.random() * 8) + 2;
-        const n2 = Math.floor(Math.random() * 8) + 2;
-        rightAns = n1 * n2;
-        document.getElementById('quest').innerText = `${n1} × ${n2} = ?`;
-        document.getElementById('ans').value = '';
-        document.getElementById('res').innerText = '';
-        document.getElementById('next').style.display = 'none';
-    }
-    function check() {
-        const userAns = document.getElementById('ans').value;
-        const res = document.getElementById('res');
-        if (userAns == rightAns) {
-            res.innerText = "✅ Верно!"; res.style.color = "green";
-            document.getElementById('next').style.display = 'block';
-        } else {
-            res.innerText = "❌ Попробуй еще раз"; res.style.color = "red";
-        }
     }
 </script>
 
