@@ -1,196 +1,202 @@
-
-
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Math — Образовательная платформа</title>
+    <title>Universal Math</title>
     <style>
         :root {
-            --accent: #6c5ce7;
-            --accent-dark: #4834d4;
-            --bg: #f4f7fa;
-            --card-bg: #ffffff;
-            --text-main: #2d3436;
-            --text-secondary: #636e72;
-            --success: #00b894;
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg: #f8f9fa;
+            --white: #ffffff;
         }
-
-        html { scroll-behavior: smooth; } /* Плавная прокрутка */
 
         body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             background-color: var(--bg);
-            color: var(--text-main);
+            color: var(--primary);
         }
 
+        /* Шапка и Бургер */
         header {
-            background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 100%);
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-        }
-
-        header h1 { margin: 0; font-size: 3.5em; letter-spacing: -2px; }
-        header p { opacity: 0.9; font-size: 1.2em; margin-top: 10px; }
-
-        nav {
-            background: var(--card-bg);
-            padding: 15px 0;
+            background: var(--white);
+            padding: 15px 20px;
             display: flex;
-            justify-content: center;
-            gap: 30px;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        nav a {
-            text-decoration: none;
-            color: var(--text-secondary);
-            font-weight: 600;
+        .logo { font-weight: bold; font-size: 1.2em; color: var(--accent); }
+
+        .burger {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1100;
+        }
+
+        .burger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--primary);
             transition: 0.3s;
         }
 
-        nav a:hover { color: var(--accent); }
-
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
+        /* Выпадающее меню */
+        nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 250px;
+            height: 100%;
+            background: var(--white);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: 0.4s;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 20px;
+            gap: 20px;
+            z-index: 1050;
         }
 
-        /* Общий стиль секций */
-        section {
-            margin-bottom: 60px;
-            padding-top: 20px;
+        nav.active { right: 0; }
+
+        nav a {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.2em;
+            font-weight: 500;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
         }
 
-        .card {
-            background: var(--card-bg);
+        /* Секции сайта */
+        .section {
+            display: none; /* Все разделы скрыты по умолчанию */
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section.active { display: block; } /* Показываем только активный */
+
+        #home { display: block; } /* Главная видна сразу */
+
+        .hero-card {
+            background: var(--white);
+            padding: 40px;
             border-radius: 20px;
-            padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
         }
 
-        h2 { border-left: 5px solid var(--accent); padding-left: 15px; color: var(--accent-dark); }
-
-        /* Стили для упражнения */
-        .exercise-box {
-            text-align: center;
-            border: 2px solid #eee;
+        /* Стиль тренажера */
+        .exercise-card {
+            background: var(--white);
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .question-text { font-size: 2.5em; font-weight: 800; margin: 20px 0; }
-
-        input[type="number"] {
-            width: 120px;
-            padding: 15px;
-            font-size: 1.5em;
-            border: 2px solid #dfe6e9;
-            border-radius: 12px;
-            text-align: center;
-            outline: none;
-        }
-
-        .btn {
-            background: var(--accent-dark);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        footer { text-align: center; padding: 40px; color: #b2bec3; background: #fff; }
+        .question { font-size: 3em; margin: 20px 0; font-weight: bold; }
+        input { width: 100px; padding: 10px; font-size: 1.5em; text-align: center; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px; }
+        .btn { background: var(--accent); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 1em; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Universal Math</h1>
-    <p>Интерактивная математика для каждого</p>
+    <div class="logo">Universal Math</div>
+    <div class="burger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
 </header>
 
-<nav>
-    <a href="#theory">Теория</a>
-    <a href="#formulas">Формулы</a>
-    <a href="#calc">Калькуляторы</a>
-    <a href="#practice">Практика</a>
+<nav id="menu">
+    <a href="#" onclick="showSection('home')">Главная</a>
+    <a href="#" onclick="showSection('practice')">Практика</a>
+    <a href="#" onclick="showSection('theory')">Теория</a>
+    <a href="#" onclick="showSection('formulas')">Формулы</a>
 </nav>
 
-<div class="container">
-    
-    <section id="theory">
-        <h2>Теория</h2>
-        <div class="card">
-            <p>Здесь будут собраны подробные уроки по алгебре и геометрии. Мы готовим контент, чтобы объяснять сложные темы простым языком.</p>
-        </div>
-    </section>
-
-    <section id="formulas">
-        <h2>Формулы</h2>
-        <div class="card">
-            <p>Удобные шпаргалки с основными формулами. Скоро здесь появятся таблицы по тригонометрии и логарифмам.</p>
-        </div>
-    </section>
-
-    <section id="calc">
-        <h2>Калькуляторы</h2>
-        <div class="card">
-            <p>Инструменты для быстрого решения задач. В разработке: калькулятор квадратных уравнений и систем счисления.</p>
-        </div>
-    </section>
-
-    <section id="practice">
-        <h2>Практика</h2>
-        <div class="card exercise-box">
-            <span style="color: var(--accent); font-weight: bold; text-transform: uppercase;">Тренажер устного счета</span>
-            <div class="question-text" id="quest">7 × 4 = ?</div>
-            <input type="number" id="ans" placeholder="?">
-            <br>
-            <button class="btn" onclick="check()">Проверить ответ</button>
-            <div id="result-message" style="margin-top:20px; font-weight:bold;"></div>
-            <button class="btn" id="next" style="display:none; background:#636e72;" onclick="newQuest()">Следующий пример</button>
-        </div>
-    </section>
-
+<div id="home" class="section active">
+    <div class="hero-card">
+        <h1>Добро пожаловать в Universal Math!</h1>
+        <p>Это интерактивная платформа, созданная для того, чтобы сделать изучение математики простым и увлекательным.</p>
+        <p><strong>Для чего эта платформа:</strong> Здесь вы можете тренировать устный счет, изучать сложные формулы в простом изложении и готовиться к контрольным работам в игровой форме.</p>
+        <br>
+        <button class="btn" onclick="showSection('practice')">Начать тренировку</button>
+    </div>
 </div>
 
-<footer>
-    <p>&copy; 2026 Universal Math. Ваш путь к вершинам математики.</p>
-</footer>
+<div id="practice" class="section">
+    <h2>Тренажер: Умножение</h2>
+    <div class="exercise-card">
+        <div class="question" id="quest">6 × 9 = ?</div>
+        <input type="number" id="ans" placeholder="?">
+        <br>
+        <button class="btn" onclick="check()">Проверить</button>
+        <button class="btn" id="next" style="display:none; background:#2ecc71;" onclick="newQuest()">Дальше</button>
+        <p id="res"></p>
+    </div>
+</div>
+
+<div id="theory" class="section">
+    <h2>Теория</h2>
+    <p>Раздел в разработке. Скоро здесь появятся понятные объяснения тем!</p>
+</div>
+
+<div id="formulas" class="section">
+    <h2>Формулы</h2>
+    <p>Список основных математических формул будет доступен совсем скоро.</p>
+</div>
 
 <script>
-    let rightAns = 28;
+    // Управление меню
+    function toggleMenu() {
+        document.getElementById('menu').classList.toggle('active');
+    }
+
+    // Переключение разделов
+    function showSection(id) {
+        // Скрываем все разделы
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        // Показываем нужный
+        document.getElementById(id).classList.add('active');
+        // Закрываем меню
+        toggleMenu();
+    }
+
+    // Логика тренажера
+    let rightAns = 54;
     function newQuest() {
-        const n1 = Math.floor(Math.random() * 10) + 2;
-        const n2 = Math.floor(Math.random() * 10) + 2;
+        const n1 = Math.floor(Math.random() * 9) + 2;
+        const n2 = Math.floor(Math.random() * 9) + 2;
         rightAns = n1 * n2;
         document.getElementById('quest').innerText = `${n1} × ${n2} = ?`;
         document.getElementById('ans').value = '';
-        document.getElementById('result-message').innerText = '';
+        document.getElementById('res').innerText = '';
         document.getElementById('next').style.display = 'none';
     }
+
     function check() {
         const userAns = document.getElementById('ans').value;
-        const msg = document.getElementById('result-message');
+        const res = document.getElementById('res');
         if (userAns == rightAns) {
-            msg.innerText = "✅ Правильно!";
-            msg.style.color = "var(--success)";
+            res.innerText = "✅ Верно!";
+            res.style.color = "green";
             document.getElementById('next').style.display = 'inline-block';
         } else {
-            msg.innerText = "❌ Попробуй еще раз";
-            msg.style.color = "#d63031";
+            res.innerText = "❌ Попробуй еще раз";
+            res.style.color = "red";
         }
     }
 </script>
