@@ -24,7 +24,6 @@
 
         .container { padding: 20px; max-width: 600px; margin: 0 auto; }
         
-        /* Карточки тем в стиле S25 */
         .topic-link {
             background: var(--s-card);
             padding: 22px;
@@ -35,9 +34,9 @@
             text-decoration: none;
             color: inherit;
             box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-            transition: transform 0.2s, background 0.2s;
+            transition: transform 0.2s;
         }
-        .topic-link:active { transform: scale(0.97); background: #fafafa; }
+        .topic-link:active { transform: scale(0.97); }
         
         .icon-box {
             width: 56px; height: 56px; border-radius: 20px;
@@ -47,7 +46,7 @@
             flex-shrink: 0;
         }
         .topic-info b { display: block; font-size: 1.15em; margin-bottom: 3px; }
-        .topic-info span { color: #8e8e93; font-size: 0.9em; line-height: 1.2; }
+        .topic-info span { color: #8e8e93; font-size: 0.9em; }
     </style>
 </head>
 <body>
@@ -63,7 +62,7 @@
         <div class="icon-box">🔢</div>
         <div class="topic-info">
             <b>Натуральные числа</b>
-            <span>Основы счета и правила использования цифр</span>
+            <span>Основы счета и правила</span>
         </div>
     </a>
 
@@ -71,15 +70,15 @@
         <div class="icon-box">➕</div>
         <div class="topic-info">
             <b>Сложение и вычитание</b>
-            <span>Разбор действий на жизненных примерах</span>
+            <span>Расчеты в у.е.</span>
         </div>
     </a>
 
-    <a href="#" class="topic-link" style="opacity: 0.7;">
+    <a href="multiplication.html" class="topic-link">
         <div class="icon-box">✖️</div>
         <div class="topic-info">
             <b>Умножение и деление</b>
-            <span>Скоро добавим новый материал</span>
+            <span>Работа с группами в у.е.</span>
         </div>
     </a>
 
