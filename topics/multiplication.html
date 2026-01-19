@@ -1,68 +1,21 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Умножение и деление — Universal Math</title>
-    <style>
-        :root { --s-blue: #035efc; --s-bg: #f2f4f7; --s-card: #ffffff; --radius: 32px; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--s-bg); color: #1d1d1f; line-height: 1.6; }
-        header { background: #fff; padding: 20px 25px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
-        .back-link { text-decoration: none; color: var(--s-blue); font-size: 1.5em; margin-right: 20px; }
-        .container { padding: 20px; max-width: 650px; margin: 0 auto; }
-        .card { background: var(--s-card); padding: 30px; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        h1 { font-size: 1.6em; color: var(--s-blue); margin-bottom: 20px; border-left: 5px solid var(--s-blue); padding-left: 15px; }
-        
-        /* Исправленный столбик */
-        .math-column {
-            font-family: "Times New Roman", Times, serif;
-            font-style: italic;
-            background: #ffffff;
-            color: #1d1d1f;
-            padding: 25px;
-            border-radius: 24px;
-            border: 1px solid #e0e0e0;
-            line-height: 1.2;
-            display: inline-block;
-            font-size: 1.3em;
-            letter-spacing: 3px;
-        }
-
-        .step { background: #f8f9ff; padding: 15px; border-radius: 20px; margin-bottom: 10px; display: flex; align-items: flex-start; }
-        .step-num { background: var(--s-blue); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; font-size: 0.8em; font-weight: bold; }
-    </style>
-</head>
-<body>
-<header>
-    <a href="theory_main.html" class="back-link">←</a>
-    <div style="font-weight: 700;">Умножение и деление</div>
-</header>
-<div class="container">
-    <div class="card">
-        <h1>Как работает умножение</h1>
-        <p>Умножение заменяет сложение одинаковых чисел.</p>
-        <div class="step"><div class="step-num">1</div><span><b>4 × 10</b> — это число 10, взятое 4 раза.</span></div>
-        <div class="step"><div class="step-num">2</div><span>Результат умножения называется <i>произведением</i>.</span></div>
+<div class="card">
+    <h1>Деление уголком</h1>
+    <p>Пример: 256 разделить на 4</p>
+    
+    <div style="text-align: center; margin: 20px 0;">
+        <div class="column-math" style="text-align: left;">
+            256│<u> 4  </u><br>
+            <u>24</u>│ 64<br>
+             16<br>
+             <u>16</u><br>
+              0
+        </div>
     </div>
 
-    <div class="card">
-        <h1>Деление столбиком</h1>
-        <p>Пример записи деления «уголком»:</p>
-        
-        <div style="text-align: center; margin: 20px 0;">
-            <div class="math-column">
-                256 | <u>&nbsp;4&nbsp;&nbsp;</u><br>
-                <u>24</u>&nbsp; | 64<br>
-                &nbsp;16<br>
-                &nbsp;<u>16</u><br>
-                &nbsp;&nbsp;0
-            </div>
-        </div>
-
-        <div class="step"><div class="step-num">1</div><span>Делим 25 на 4, берем по 6.</span></div>
-        <div class="step"><div class="step-num">2</div><span>Остаток 1, сносим 6, получаем 16.</span></div>
-        <div class="step"><div class="step-num">3</div><span>16 делим на 4, берем по 4. Итог: <b>64</b>.</span></div>
+    <div style="background: #f8f9ff; padding: 15px; border-radius: 20px; font-size: 0.9em;">
+        <b>Алгоритм:</b><br>
+        1. 25 делим на 4, получаем <b>6</b>. (6 * 4 = 24)<br>
+        2. Остаток 1, сносим цифру 6, получаем 16.<br>
+        3. 16 делим на 4, получаем <b>4</b>. (4 * 4 = 16)
     </div>
 </div>
-</body>
-</html>
