@@ -3,112 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Math</title>
+    <title>Universal Math — S25 Style</title>
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --bg: #f8f9fa;
-            --white: #ffffff;
+            /* Палитра в стиле Samsung S25 / One UI */
+            --s-blue: #035efc;
+            --s-dark-blue: #0246bc;
+            --s-bg: #f2f4f7;
+            --s-card: #ffffff;
+            --s-text: #1d1d1f;
+            --s-gray: #8e8e93;
+            --radius: 28px; /* Характерные сильно закругленные углы */
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
-            background-color: var(--bg);
-            color: var(--primary);
+            background-color: var(--s-bg);
+            color: var(--s-text);
+            overflow-x: hidden;
         }
 
-        /* Шапка и Бургер */
+        /* Шапка с градиентом */
         header {
-            background: var(--white);
-            padding: 15px 20px;
+            background: linear-gradient(135deg, #035efc 0%, #a259ff 100%);
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
-        .logo { font-weight: bold; font-size: 1.2em; color: var(--accent); }
+        .logo { font-weight: 700; font-size: 1.3em; letter-spacing: -0.5px; }
 
-        .burger {
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            z-index: 1100;
-        }
+        /* Бургер-меню */
+        .burger { cursor: pointer; display: flex; flex-direction: column; gap: 6px; }
+        .burger span { display: block; width: 28px; height: 3px; background: white; border-radius: 10px; }
 
-        .burger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: var(--primary);
-            transition: 0.3s;
-        }
-
-        /* Выпадающее меню */
+        /* Боковое меню One UI */
         nav {
             position: fixed;
             top: 0;
             right: -100%;
-            width: 250px;
+            width: 280px;
             height: 100%;
-            background: var(--white);
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-            transition: 0.4s;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            padding: 80px 20px;
-            gap: 20px;
+            padding: 100px 30px;
+            gap: 25px;
             z-index: 1050;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
         }
 
         nav.active { right: 0; }
 
         nav a {
             text-decoration: none;
-            color: var(--primary);
-            font-size: 1.2em;
-            font-weight: 500;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            color: var(--s-text);
+            font-size: 1.4em;
+            font-weight: 600;
+            transition: 0.2s;
         }
 
-        /* Секции сайта */
-        .section {
-            display: none; /* Все разделы скрыты по умолчанию */
-            padding: 40px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
+        nav a:active { color: var(--s-blue); transform: scale(0.95); }
 
-        .section.active { display: block; } /* Показываем только активный */
+        /* Контентные секции */
+        .section { display: none; padding: 30px 20px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.5s; }
+        .section.active { display: block; }
 
-        #home { display: block; } /* Главная видна сразу */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .hero-card {
-            background: var(--white);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-
-        /* Стиль тренажера */
-        .exercise-card {
-            background: var(--white);
+        /* Карточки в стиле S25 */
+        .card {
+            background: var(--s-card);
             padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: var(--radius);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
         }
 
-        .question { font-size: 3em; margin: 20px 0; font-weight: bold; }
-        input { width: 100px; padding: 10px; font-size: 1.5em; text-align: center; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px; }
-        .btn { background: var(--accent); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 1em; }
+        h1, h2 { font-weight: 700; letter-spacing: -0.5px; }
+
+        .btn {
+            background: var(--s-blue);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            font-size: 1em;
+        }
+
+        .btn:active { transform: scale(0.97); background: var(--s-dark-blue); }
+
+        input {
+            width: 80%;
+            padding: 15px;
+            border-radius: 18px;
+            border: 2px solid #eee;
+            background: #f9f9f9;
+            font-size: 1.2em;
+            text-align: center;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--s-blue); }
+
+        .formula-item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 10px 0;
+            text-align: left;
+            border-left: 5px solid var(--s-blue);
+        }
     </style>
 </head>
 <body>
@@ -122,82 +141,102 @@
 
 <nav id="menu">
     <a href="#" onclick="showSection('home')">Главная</a>
-    <a href="#" onclick="showSection('practice')">Практика</a>
     <a href="#" onclick="showSection('theory')">Теория</a>
     <a href="#" onclick="showSection('formulas')">Формулы</a>
+    <a href="#" onclick="showSection('practice')">Практика</a>
+    <a href="#" onclick="showSection('calc')">Калькуляторы</a>
 </nav>
 
 <div id="home" class="section active">
-    <div class="hero-card">
-        <h1>Добро пожаловать в Universal Math!</h1>
-        <p>Это интерактивная платформа, созданная для того, чтобы сделать изучение математики простым и увлекательным.</p>
-        <p><strong>Для чего эта платформа:</strong> Здесь вы можете тренировать устный счет, изучать сложные формулы в простом изложении и готовиться к контрольным работам в игровой форме.</p>
-        <br>
-        <button class="btn" onclick="showSection('practice')">Начать тренировку</button>
-    </div>
-</div>
-
-<div id="practice" class="section">
-    <h2>Тренажер: Умножение</h2>
-    <div class="exercise-card">
-        <div class="question" id="quest">6 × 9 = ?</div>
-        <input type="number" id="ans" placeholder="?">
-        <br>
-        <button class="btn" onclick="check()">Проверить</button>
-        <button class="btn" id="next" style="display:none; background:#2ecc71;" onclick="newQuest()">Дальше</button>
-        <p id="res"></p>
+    <div class="card">
+        <h1>Привет!</h1>
+        <p>Добро пожаловать в Universal Math. Это современная платформа для изучения математики в стиле Samsung S25.</p>
+        <p>Используйте меню, чтобы переключаться между разделами.</p>
+        <button class="btn" onclick="showSection('practice')">Начать учиться</button>
     </div>
 </div>
 
 <div id="theory" class="section">
-    <h2>Теория</h2>
-    <p>Раздел в разработке. Скоро здесь появятся понятные объяснения тем!</p>
+    <div class="card">
+        <h2>Теория</h2>
+        <div class="formula-item">
+            <strong>Что такое умножение?</strong><br>
+            Это краткая запись суммы одинаковых слагаемых. 5 × 3 — это 5 + 5 + 5.
+        </div>
+        <div class="formula-item">
+            <strong>Переместительный закон</strong><br>
+            От перемены мест множителей произведение не меняется.
+        </div>
+    </div>
 </div>
 
 <div id="formulas" class="section">
-    <h2>Формулы</h2>
-    <p>Список основных математических формул будет доступен совсем скоро.</p>
+    <div class="card">
+        <h2>Формулы</h2>
+        <div class="formula-item">S = a × b (Площадь прямоугольника)</div>
+        <div class="formula-item">P = 2 × (a + b) (Периметр)</div>
+        <div class="formula-item">V = a × b × c (Объём куба)</div>
+    </div>
+</div>
+
+<div id="practice" class="section">
+    <div class="card">
+        <h2>Практика</h2>
+        <div style="font-size: 3em; margin: 20px 0; font-weight: bold;" id="quest">8 × 9 = ?</div>
+        <input type="number" id="ans" placeholder="Ответ">
+        <button class="btn" onclick="check()">Проверить</button>
+        <button class="btn" id="next" style="display:none; background:#2ecc71; margin-top:10px;" onclick="newQuest()">Следующий</button>
+        <p id="res" style="font-weight:bold; margin-top:15px;"></p>
+    </div>
+</div>
+
+<div id="calc" class="section">
+    <div class="card">
+        <h2>Калькулятор</h2>
+        <input type="number" id="n1" placeholder="Число 1">
+        <input type="number" id="n2" placeholder="Число 2">
+        <button class="btn" onclick="calcSum()">Сложить</button>
+        <h3 id="c-res"></h3>
+    </div>
 </div>
 
 <script>
-    // Управление меню
-    function toggleMenu() {
-        document.getElementById('menu').classList.toggle('active');
-    }
+    function toggleMenu() { document.getElementById('menu').classList.toggle('active'); }
 
-    // Переключение разделов
     function showSection(id) {
-        // Скрываем все разделы
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        // Показываем нужный
         document.getElementById(id).classList.add('active');
-        // Закрываем меню
-        toggleMenu();
+        document.getElementById('menu').classList.remove('active');
+        window.scrollTo(0,0);
     }
 
-    // Логика тренажера
-    let rightAns = 54;
+    // Логика практики
+    let rightAns = 72;
     function newQuest() {
-        const n1 = Math.floor(Math.random() * 9) + 2;
-        const n2 = Math.floor(Math.random() * 9) + 2;
+        const n1 = Math.floor(Math.random() * 8) + 2;
+        const n2 = Math.floor(Math.random() * 8) + 2;
         rightAns = n1 * n2;
         document.getElementById('quest').innerText = `${n1} × ${n2} = ?`;
         document.getElementById('ans').value = '';
         document.getElementById('res').innerText = '';
         document.getElementById('next').style.display = 'none';
     }
-
     function check() {
         const userAns = document.getElementById('ans').value;
         const res = document.getElementById('res');
         if (userAns == rightAns) {
-            res.innerText = "✅ Верно!";
-            res.style.color = "green";
-            document.getElementById('next').style.display = 'inline-block';
+            res.innerText = "✅ Превосходно!"; res.style.color = "green";
+            document.getElementById('next').style.display = 'block';
         } else {
-            res.innerText = "❌ Попробуй еще раз";
-            res.style.color = "red";
+            res.innerText = "❌ Попробуй еще раз"; res.style.color = "red";
         }
+    }
+
+    // Калькулятор
+    function calcSum() {
+        const v1 = Number(document.getElementById('n1').value);
+        const v2 = Number(document.getElementById('n2').value);
+        document.getElementById('c-res').innerText = `Итог: ${v1 + v2}`;
     }
 </script>
 
