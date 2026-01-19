@@ -2,70 +2,118 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сложение до 100 — Samsung Math</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Сложение до 100 — Universal Math</title>
     <style>
         :root { 
-            --s-blue: #035efc; --s-green: #2ecc71; --s-bg: #f2f4f7; 
-            --s-card: #ffffff; --radius-main: 32px; --radius-inner: 18px;
+            --s-blue: #035efc; 
+            --s-green: #2ecc71;
+            --s-bg: #f2f4f7; 
+            --s-card: #ffffff; 
+            --radius-main: 32px; 
+            --radius-inner: 18px;
         }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: var(--s-bg); color: #1d1d1f; -webkit-tap-highlight-color: transparent; }
         
-        /* One UI Header */
+        body { 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; 
+            background: var(--s-bg); 
+            color: #1d1d1f; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Хедер в стиле One UI 7 */
         header { 
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(25px);
-            padding: 15px 25px; display: flex; align-items: center; position: sticky; 
-            top: 0; z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.05);
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(20px);
+            padding: 15px 25px; 
+            display: flex; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            border-bottom: 1px solid rgba(0,0,0,0.05);
             justify-content: space-between;
         }
-        .back-link { text-decoration: none; color: var(--s-blue); font-size: 1.8rem; font-weight: 300; line-height: 1; }
-        
+
+        .back-link { 
+            text-decoration: none; 
+            color: var(--s-blue); 
+            font-size: 1.8rem; 
+            display: flex;
+            align-items: center;
+        }
+
         .container { padding: 20px; max-width: 500px; margin: 0 auto; }
-        
-        /* Stats Cards */
+
+        /* Панель статистики */
         .stats-bar { display: flex; gap: 12px; margin-bottom: 20px; }
         .stat-item {
-            flex: 1; background: var(--s-card); padding: 16px; border-radius: 24px;
-            text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            flex: 1;
+            background: var(--s-card);
+            padding: 16px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
-        .stat-label { font-size: 0.7rem; color: #8e8e93; display: block; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
-        .stat-value { font-size: 1.4rem; font-weight: 800; color: var(--s-blue); font-variant-numeric: tabular-nums; }
-        
-        /* Examples Card */
+        .stat-label { font-size: 0.75rem; color: #8e8e93; display: block; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+        .stat-value { font-size: 1.4rem; font-weight: 800; color: var(--s-blue); }
+
         .card { 
-            background: var(--s-card); padding: 28px; border-radius: var(--radius-main); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; 
+            background: var(--s-card); 
+            padding: 28px; 
+            border-radius: var(--radius-main); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; 
         }
+
         .example-row {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 20px; font-size: 1.5rem; font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
         }
-        .example-row:last-child { margin-bottom: 0; }
-        
+
         input {
-            width: 95px; padding: 12px; border-radius: var(--radius-inner);
-            border: 2px solid #edf0f5; text-align: center; font-size: 1.3rem;
-            font-weight: 700; outline: none; background: #f8f9fc;
-            transition: all 0.2s ease; color: #1d1d1f;
+            width: 95px;
+            padding: 12px;
+            border-radius: var(--radius-inner);
+            border: 2px solid #edf0f5;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            outline: none;
+            background: #f8f9fc;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         input:focus { border-color: var(--s-blue); background: #fff; transform: scale(1.05); }
         input.correct { border-color: var(--s-green); background: #e9fbee; color: #1e7d43; }
         input.wrong { border-color: #ff4757; background: #fff2f2; }
 
-        /* Button */
         .btn-refresh {
-            width: 100%; padding: 20px; border: none; border-radius: 24px;
-            background: var(--s-blue); color: white; font-size: 1.1rem;
-            font-weight: 700; cursor: pointer; box-shadow: 0 8px 25px rgba(3, 94, 252, 0.3);
-            transition: transform 0.1s active;
+            width: 100%;
+            padding: 20px;
+            border: none;
+            border-radius: 24px;
+            background: var(--s-blue);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(3, 94, 252, 0.3);
+            transition: transform 0.1s;
         }
+
         .btn-refresh:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
 
 <header>
-    <a href="../index.html" class="back-link"></a> 
+    <a href="../index.html" class="back-link">←</a>
     <div style="font-weight: 800; font-size: 1.1rem;">Сложение до 100</div>
     <div style="width: 30px;"></div> 
 </header>
@@ -73,22 +121,26 @@
 <div class="container">
     <div class="stats-bar">
         <div class="stat-item">
-            <span class="stat-label">Правильно</span>
+            <span class="stat-label">Верно</span>
             <span class="stat-value" id="score">0/10</span>
         </div>
         <div class="stat-item">
-            <span class="stat-label">Таймер</span>
+            <span class="stat-label">Время</span>
             <span class="stat-value" id="timer">00:00</span>
         </div>
     </div>
 
-    <div class="card" id="practice-container"></div>
+    <div class="card" id="practice-container">
+        </div>
 
     <button class="btn-refresh" onclick="resetGame()">Обновить задания</button>
 </div>
 
 <script>
-    let correctCount = 0; let seconds = 0; let timerInterval = null; let timerStarted = false;
+    let correctCount = 0;
+    let seconds = 0;
+    let timerInterval = null;
+    let timerStarted = false;
 
     function startTimer() {
         if (!timerStarted) {
@@ -105,21 +157,27 @@
     function generateExamples() {
         const container = document.getElementById('practice-container');
         container.innerHTML = '';
+        
         for (let i = 0; i < 10; i++) {
             let a = Math.floor(Math.random() * 85) + 5;
             let b = Math.floor(Math.random() * (100 - a)) + 2;
+
             const row = document.createElement('div');
             row.className = 'example-row';
-            row.innerHTML = `<span>${a} + ${b} =</span><input type="number" data-answer="${a + b}" oninput="handleInput(this)" placeholder="?">`;
+            row.innerHTML = `
+                <span>${a} + ${b} =</span>
+                <input type="number" inputmode="decimal" data-answer="${a + b}" oninput="handleInput(this)" placeholder="?">
+            `;
             container.appendChild(row);
         }
     }
 
     function handleInput(input) {
         if (input.value.length > 0) startTimer();
+        
         const userAnswer = parseInt(input.value);
         const correctAnswer = parseInt(input.getAttribute('data-answer'));
-        
+
         if (userAnswer === correctAnswer) {
             input.classList.remove('wrong');
             input.classList.add('correct');
@@ -141,12 +199,18 @@
     }
 
     function resetGame() {
-        clearInterval(timerInterval); seconds = 0; correctCount = 0; timerStarted = false;
+        clearInterval(timerInterval);
+        seconds = 0;
+        correctCount = 0;
+        timerStarted = false;
         document.getElementById('timer').innerText = "00:00";
         document.getElementById('score').innerText = "0/10";
         generateExamples();
     }
+
     window.onload = generateExamples;
 </script>
+
 </body>
 </html>
+
