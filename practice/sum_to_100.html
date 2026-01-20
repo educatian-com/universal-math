@@ -25,6 +25,7 @@
             min-height: 100vh;
         }
 
+        /* Экран выбора сложности */
         #setup-screen {
             display: flex;
             flex-direction: column;
@@ -37,22 +38,20 @@
         .level-btn {
             background: white;
             border: none;
-            padding: 25px 30px;
+            padding: 30px;
             border-radius: var(--radius);
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            font-size: 1.3em;
+            font-size: 1.4em;
             font-weight: 800;
             cursor: pointer;
             transition: 0.3s;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
+            color: var(--s-text);
         }
 
         .level-btn:active { transform: scale(0.95); }
-        .level-btn span { font-size: 0.65em; color: var(--s-blue); opacity: 0.7; font-weight: 600; max-width: 50%; text-align: right; }
 
+        /* Игровой экран */
         #game-screen { display: none; width: 100%; flex-direction: column; align-items: center; }
 
         .game-header { width: 90%; max-width: 450px; padding: 25px 0 10px 0; }
@@ -71,7 +70,7 @@
             text-align: center;
         }
 
-        .question { font-size: 2.2em; font-weight: 900; color: var(--s-blue); margin-bottom: 30px; line-height: 1.2; }
+        .question { font-size: 2.2em; font-weight: 900; color: var(--s-blue); margin-bottom: 30px; }
 
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .opt {
@@ -82,26 +81,39 @@
         .opt.correct { background: #4caf50 !important; color: white !important; }
         .opt.wrong { background: #ff5252 !important; color: white !important; animation: shake 0.3s; }
 
-        #solution-container {
+        /* Блок управления после ответа */
+        #after-answer {
             display: none;
             margin-top: 25px;
-            padding-top: 20px;
-            border-top: 2px solid #f2f4f7;
+            flex-direction: column;
+            gap: 12px;
             animation: fadeIn 0.4s;
         }
 
-        #solution-text {
+        .action-btn {
+            background: #f2f4f7; border: none; padding: 18px; border-radius: 22px;
+            font-size: 1em; font-weight: 700; cursor: pointer; color: var(--s-text);
+            transition: 0.2s;
+        }
+
+        .next-btn { background: var(--s-blue); color: white; }
+
+        /* Скрытый текст решения */
+        #solution-box {
+            display: none;
             text-align: left;
             font-size: 0.95em;
             line-height: 1.6;
             color: #444;
-            margin-bottom: 20px;
+            margin-top: 15px;
             background: #f9f9f9;
-            padding: 15px;
-            border-radius: 20px;
+            padding: 20px;
+            border-radius: 25px;
+            animation: slideDown 0.3s;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
 
         .back { margin-top: auto; margin-bottom: 40px; text-decoration: none; color: #888; font-weight: 700; padding: 20px; }
@@ -110,10 +122,10 @@
 <body>
 
     <div id="setup-screen">
-        <h1 style="text-align: center; margin-bottom: 30px; letter-spacing: -1px;">Сложение</h1>
-        <button class="level-btn" onclick="startGame('easy')">Легкий <span>до 10 + до 100</span></button>
-        <button class="level-btn" onclick="startGame('medium')">Средний <span>два двузначных</span></button>
-        <button class="level-btn" onclick="startGame('hard')">Сложный <span>три любых числа</span></button>
+        <h1 style="text-align: center; margin-bottom: 30px;">Сложение</h1>
+        <button class="level-btn" onclick="startGame('easy')">Легкий</button>
+        <button class="level-btn" onclick="startGame('medium')">Средний</button>
+        <button class="level-btn" onclick="startGame('hard')">Сложный</button>
         <a href="../index.html" style="text-align: center; color: var(--s-blue); text-decoration: none; font-weight: 700; margin-top: 20px;">Назад в меню</a>
     </div>
 
@@ -131,9 +143,10 @@
                 <div class="question" id="q-text">...</div>
                 <div class="options-grid" id="opt-box"></div>
                 
-                <div id="solution-container">
-                    <div id="solution-text"></div>
-                    <button class="opt" style="width: 100%; background: var(--s-blue); color: white;" onclick="next()">Далее</button>
+                <div id="after-answer">
+                    <button class="action-btn" id="show-sol-btn" onclick="toggleSolution()">Посмотреть решение</button>
+                    <div id="solution-box"></div>
+                    <button class="action-btn next-btn" onclick="next()">Далее</button>
                 </div>
             </div>
         </div>
@@ -180,19 +193,21 @@
                 return;
             }
             
-            document.getElementById('solution-container').style.display = 'none';
+            document.getElementById('after-answer').style.display = 'none';
+            document.getElementById('solution-box').style.display = 'none';
+            document.getElementById('show-sol-btn').innerText = 'Посмотреть решение';
             document.getElementById('opt-box').style.pointerEvents = 'auto';
 
             let n1, n2, n3 = 0, res;
             
             if (difficulty === 'easy') {
-                n1 = Math.floor(Math.random() * 9) + 1; // однозначное до 10
-                n2 = Math.floor(Math.random() * 90) + 10; // двузначное до 100
+                n1 = Math.floor(Math.random() * 9) + 1;
+                n2 = Math.floor(Math.random() * 90) + 10;
                 res = n1 + n2;
                 document.getElementById('q-text').innerText = `${n1} + ${n2}`;
             } else if (difficulty === 'medium') {
-                n1 = Math.floor(Math.random() * 90) + 10; // двузначное
-                n2 = Math.floor(Math.random() * 90) + 10; // двузначное
+                n1 = Math.floor(Math.random() * 90) + 10;
+                n2 = Math.floor(Math.random() * 90) + 10;
                 res = n1 + n2;
                 document.getElementById('q-text').innerText = `${n1} + ${n2}`;
             } else {
@@ -226,6 +241,7 @@
         function check(btn, val) {
             document.getElementById('opt-box').style.pointerEvents = 'none';
             const correct = currentQ.res;
+            const solBtn = document.getElementById('show-sol-btn');
             
             if (val === correct) {
                 btn.classList.add('correct');
@@ -233,30 +249,46 @@
                 step++;
                 document.getElementById('score-val').innerText = `${step}/${total}`;
                 document.getElementById('bar').style.width = (step/total*100) + '%';
+                solBtn.innerText = 'Посмотреть решение';
             } else {
                 btn.classList.add('wrong');
                 playSound('lose');
                 Array.from(document.querySelectorAll('.opt')).forEach(b => {
                     if(parseInt(b.innerText) === correct) b.classList.add('correct');
                 });
+                // Предлагаем решение при ошибке
+                solBtn.innerText = 'Посмотреть, как правильно?';
             }
-            showSolution();
+
+            document.getElementById('after-answer').style.display = 'flex';
+            prepareSolution();
         }
 
-        function showSolution() {
-            const solText = document.getElementById('solution-text');
+        function prepareSolution() {
+            const solBox = document.getElementById('solution-box');
             const {n1, n2, n3, res} = currentQ;
             
             if (difficulty === 'hard') {
-                solText.innerHTML = `<b>Решение:</b><br>1. Складываем первые два: ${n1} + ${n2} = ${n1+n2}<br>2. Прибавляем третье: ${n1+n2} + ${n3} = <b>${res}</b>`;
+                solBox.innerHTML = `<b>Разбор:</b><br>1. Сначала: ${n1} + ${n2} = ${n1+n2}<br>2. Затем: ${n1+n2} + ${n3} = <b>${res}</b>`;
             } else if (difficulty === 'easy') {
-                solText.innerHTML = `<b>Решение:</b><br>К числу ${n2} прибавляем ${n1}:<br> ${n2} + ${n1} = <b>${res}</b>`;
+                solBox.innerHTML = `<b>Разбор:</b><br>К числу ${n2} прибавляем ${n1}:<br> ${n2} + ${n1} = <b>${res}</b>`;
             } else {
                 const d1 = Math.floor(n1/10)*10, e1 = n1%10;
                 const d2 = Math.floor(n2/10)*10, e2 = n2%10;
-                solText.innerHTML = `<b>Решение:</b><br>Десятки: ${d1} + ${d2} = ${d1+d2}<br>Единицы: ${e1} + ${e2} = ${e1+e2}<br>Итого: ${d1+d2} + ${e1+e2} = <b>${res}</b>`;
+                solBox.innerHTML = `<b>Разбор:</b><br>Десятки: ${d1} + ${d2} = ${d1+d2}<br>Единицы: ${e1} + ${e2} = ${e1+e2}<br>Итого: ${d1+d2} + ${e1+e2} = <b>${res}</b>`;
             }
-            document.getElementById('solution-container').style.display = 'block';
+        }
+
+        function toggleSolution() {
+            const box = document.getElementById('solution-box');
+            const btn = document.getElementById('show-sol-btn');
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                btn.innerText = (btn.getAttribute('data-wrong') === 'true') ? 'Посмотреть, как правильно?' : 'Посмотреть решение';
+            } else {
+                box.style.display = 'block';
+                btn.innerText = 'Скрыть решение';
+            }
         }
     </script>
 </body>
