@@ -23,14 +23,15 @@
             overflow-x: hidden;
         }
 
-        /* Эффект размытия для контента */
+        /* Эффект размытия и отдаления контента */
         #main-content {
-            transition: filter 0.4s ease, transform 0.4s ease;
+            transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.menu-open #main-content {
-            filter: blur(8px); /* Размытие фона */
-            pointer-events: none; /* Чтобы нельзя было кликать сквозь меню */
+            filter: blur(10px);
+            transform: scale(0.96); /* Контент как бы уходит на задний план */
+            pointer-events: none;
         }
 
         /* Затемнение фона */
@@ -40,7 +41,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.1);
             opacity: 0;
             visibility: hidden;
             transition: 0.4s;
@@ -70,50 +71,61 @@
         .burger { cursor: pointer; display: flex; flex-direction: column; gap: 6px; z-index: 1100; }
         .burger span { display: block; width: 26px; height: 3px; background: white; border-radius: 10px; transition: 0.3s; }
 
-        /* Анимация бургера в крестик (опционально) */
+        /* Анимация бургера */
         body.menu-open .burger span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
         body.menu-open .burger span:nth-child(2) { opacity: 0; }
         body.menu-open .burger span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
-        /* Навигация (Боковое меню) */
+        /* Навигация Samsung S25 Style */
         nav {
             position: fixed;
             top: 0;
             right: -100%;
-            width: 85%; /* Более удобно для мобильных */
+            width: 82%;
             max-width: 320px;
             height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: #f4f6f9; /* Светло-серый фон меню */
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            padding: 100px 0 0 0; /* Убрали боковые отступы для монолитности */
+            padding: 100px 15px 0 15px; /* Боковые отступы для формы карточек */
             z-index: 1050;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-            border-radius: 40px 0 0 40px; /* Скругление края меню как в One UI */
+            box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+            border-radius: 40px 0 0 40px;
         }
 
         nav.active { right: 0; }
 
-        /* Ссылки в меню (Монолитные блоки) */
+        /* Оформление ссылок как подсвеченных блоков */
         nav a {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             text-decoration: none;
             color: var(--s-text);
-            font-size: 1.25em; /* Шрифт крупнее */
+            font-size: 1.25em;
             font-weight: 600;
-            padding: 20px 30px; /* Больше область нажатия */
-            margin: 0; /* Убрали отступы между блоками */
-            border-bottom: 1px solid rgba(0,0,0,0.05); /* Тонкая разделительная линия */
+            padding: 20px 25px;
+            margin: 0; /* Без отступов между ними */
+            background: #ffffff; /* Белая "подсветка" каждого блока */
+            border-bottom: 1px solid #f0f0f0; /* Тонкая линия разделитель */
             transition: 0.2s;
         }
 
-        nav a:first-child { border-top: 1px solid rgba(0,0,0,0.05); }
+        /* Скругления для создания эффекта единой капсулы */
+        nav a:first-child {
+            border-radius: 25px 25px 0 0;
+        }
+        
+        nav a:last-child {
+            border-radius: 0 0 25px 25px;
+            border-bottom: none;
+        }
 
-        nav a:active { background: rgba(0, 0, 0, 0.05); }
+        nav a:active {
+            background: #f9f9f9;
+            transform: scale(0.98);
+        }
 
         .icon-box {
             width: 44px;
@@ -127,7 +139,7 @@
             flex-shrink: 0;
         }
 
-        /* Основные блоки */
+        /* Основные блоки контента */
         .section { display: none; padding: 25px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.4s; }
         .section.active { display: block; }
 
@@ -209,7 +221,6 @@
     function toggleMenu() {
         const menu = document.getElementById('menu');
         const body = document.body;
-        
         menu.classList.toggle('active');
         body.classList.toggle('menu-open');
     }
