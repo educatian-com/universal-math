@@ -23,50 +23,27 @@
             overflow-x: hidden;
         }
 
-        /* Эффект размытия для контента */
-        #main-content {
-            transition: filter 0.4s ease, transform 0.4s ease;
-        }
+        #main-content { transition: 0.4s ease; }
+        body.menu-open #main-content { filter: blur(8px); pointer-events: none; }
 
-        body.menu-open #main-content {
-            filter: blur(8px);
-            pointer-events: none;
-        }
-
-        /* Затемнение фона */
         .overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.4s;
-            z-index: 1040;
+            opacity: 0; visibility: hidden;
+            transition: 0.4s; z-index: 1040;
         }
-        body.menu-open .overlay {
-            opacity: 1;
-            visibility: visible;
-        }
+        body.menu-open .overlay { opacity: 1; visibility: visible; }
 
-        /* Шапка */
         header {
             background: linear-gradient(135deg, var(--s-blue) 0%, var(--s-purple) 100%);
             padding: 18px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            color: white; position: sticky; top: 0; z-index: 1000;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .logo { font-weight: 800; font-size: 1.4em; letter-spacing: -1px; }
-
         .burger { cursor: pointer; display: flex; flex-direction: column; gap: 6px; z-index: 1100; }
         .burger span { display: block; width: 26px; height: 3px; background: white; border-radius: 10px; transition: 0.3s; }
 
@@ -74,19 +51,13 @@
         body.menu-open .burger span:nth-child(2) { opacity: 0; }
         body.menu-open .burger span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
-        /* Навигация */
         nav {
             position: fixed;
-            top: 0;
-            right: -100%;
-            width: 85%;
-            max-width: 320px;
-            height: 100%;
-            background: #f0f2f5; /* Слегка серый фон подложки, чтобы тени были видны лучше */
-            backdrop-filter: blur(20px);
+            top: 0; right: -100%;
+            width: 85%; max-width: 320px; height: 100%;
+            background: #f0f2f5; 
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             padding: 60px 0 0 0; 
             z-index: 1050;
             box-shadow: -10px 0 30px rgba(0,0,0,0.1);
@@ -95,7 +66,7 @@
 
         nav.active { right: 0; }
 
-        /* Ссылки в меню (Разделы с тенями) */
+        /* ИСПРАВЛЕННЫЕ РАЗДЕЛЫ С ТЕНЯМИ */
         nav a {
             display: flex;
             align-items: center;
@@ -105,37 +76,37 @@
             font-size: 1.25em;
             font-weight: 700;
             padding: 22px 30px; 
-            margin-bottom: 2px; /* ОТСТУП ДЛЯ ТЕНИ */
             background: #ffffff;
+            margin-bottom: 6px; /* Увеличили зазор для видимости тени */
+            position: relative;
             transition: 0.2s;
-            /* Тень под каждым разделом */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+            /* Выраженная тень под каждым разделом */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            border: none;
         }
 
-        /* Убираем лишние линии, так как тени теперь заменяют их */
-        nav a { border: none !important; }
+        /* Чтобы тени не перекрывались, каждый следующий блок должен быть "ниже" по слою */
+        nav a:nth-child(1) { z-index: 5; }
+        nav a:nth-child(2) { z-index: 4; }
+        nav a:nth-child(3) { z-index: 3; }
+        nav a:nth-child(4) { z-index: 2; }
+        nav a:nth-child(5) { z-index: 1; }
 
         nav a:active { 
             background: #f5f5f5; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transform: scale(0.99);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            transform: translateY(1px);
         }
 
         .icon-box {
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f2f4f7;
-            border-radius: 14px;
-            font-size: 1.4rem;
-            flex-shrink: 0;
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            background: #f2f4f7; border-radius: 14px;
+            font-size: 1.4rem; flex-shrink: 0;
         }
 
         .section { display: none; padding: 25px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.4s; }
         .section.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         .card {
@@ -143,23 +114,13 @@
             padding: 35px 25px;
             border-radius: var(--radius);
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            text-align: center;
-            margin-bottom: 20px;
+            text-align: center; margin-bottom: 20px;
         }
 
-        h1 { font-size: 2em; margin-bottom: 15px; letter-spacing: -1px; }
-        
         .btn {
-            background: var(--s-blue);
-            color: white;
-            border: none;
-            padding: 18px;
-            border-radius: 22px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1em;
-            transition: 0.3s;
+            background: var(--s-blue); color: white; border: none;
+            padding: 18px; border-radius: 22px; font-weight: 700;
+            cursor: pointer; width: 100%; font-size: 1em;
         }
     </style>
 </head>
@@ -178,20 +139,15 @@
     <a href="#" onclick="showSection('home')">
         <div class="icon-box">🏠</div> <span>Главная</span>
     </a>
-    
     <a href="topics/theory_main.html">
         <div class="icon-box">📚</div> <span>Теория</span>
     </a>
-
     <a href="#" onclick="showSection('formulas')">
         <div class="icon-box">📐</div> <span>Формулы</span>
     </a>
-    
     <a href="practice/practice_main.html">
-        <div class="icon-box" style="background: #e9fbee;">🧩</div>
-        <span>Практика</span>
+        <div class="icon-box" style="background: #e9fbee;">🧩</div> <span>Практика</span>
     </a>
-
     <a href="#" onclick="showSection('calc')">
         <div class="icon-box">🧮</div> <span>Калькуляторы</span>
     </a>
@@ -205,19 +161,15 @@
             <button class="btn" onclick="toggleMenu()">Открыть меню</button>
         </div>
     </div>
-
     <div id="formulas" class="section"><div class="card"><h2>Формулы</h2><p>Раздел наполняется...</p></div></div>
     <div id="calc" class="section"><div class="card"><h2>Калькуляторы</h2><p>Раздел наполняется...</p></div></div>
 </div>
 
 <script>
     function toggleMenu() {
-        const menu = document.getElementById('menu');
-        const body = document.body;
-        menu.classList.toggle('active');
-        body.classList.toggle('menu-open');
+        document.getElementById('menu').classList.toggle('active');
+        document.body.classList.toggle('menu-open');
     }
-
     function showSection(id) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
