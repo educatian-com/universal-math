@@ -25,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* Экран выбора сложности */
         #setup-screen {
             display: flex;
             flex-direction: column;
@@ -38,7 +37,7 @@
         .level-btn {
             background: white;
             border: none;
-            padding: 30px;
+            padding: 25px 30px;
             border-radius: var(--radius);
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             font-size: 1.3em;
@@ -52,9 +51,8 @@
         }
 
         .level-btn:active { transform: scale(0.95); }
-        .level-btn span { font-size: 0.7em; color: var(--s-blue); opacity: 0.7; font-weight: 600; }
+        .level-btn span { font-size: 0.65em; color: var(--s-blue); opacity: 0.7; font-weight: 600; max-width: 50%; text-align: right; }
 
-        /* Игровой экран */
         #game-screen { display: none; width: 100%; flex-direction: column; align-items: center; }
 
         .game-header { width: 90%; max-width: 450px; padding: 25px 0 10px 0; }
@@ -70,9 +68,7 @@
             padding: 40px 20px;
             box-sizing: border-box;
             box-shadow: 0 20px 45px rgba(0,0,0,0.08);
-            z-index: 3;
             text-align: center;
-            transition: all 0.4s ease;
         }
 
         .question { font-size: 2.2em; font-weight: 900; color: var(--s-blue); margin-bottom: 30px; line-height: 1.2; }
@@ -86,7 +82,6 @@
         .opt.correct { background: #4caf50 !important; color: white !important; }
         .opt.wrong { background: #ff5252 !important; color: white !important; animation: shake 0.3s; }
 
-        /* Блок решения */
         #solution-container {
             display: none;
             margin-top: 25px;
@@ -116,9 +111,9 @@
 
     <div id="setup-screen">
         <h1 style="text-align: center; margin-bottom: 30px; letter-spacing: -1px;">Сложение</h1>
-        <button class="level-btn" onclick="startGame('easy')">Легкий <span>0-20</span></button>
-        <button class="level-btn" onclick="startGame('medium')">Средний <span>0-100</span></button>
-        <button class="level-btn" onclick="startGame('hard')">Сложный <span>3 числа</span></button>
+        <button class="level-btn" onclick="startGame('easy')">Легкий <span>до 10 + до 100</span></button>
+        <button class="level-btn" onclick="startGame('medium')">Средний <span>два двузначных</span></button>
+        <button class="level-btn" onclick="startGame('hard')">Сложный <span>три любых числа</span></button>
         <a href="../index.html" style="text-align: center; color: var(--s-blue); text-decoration: none; font-weight: 700; margin-top: 20px;">Назад в меню</a>
     </div>
 
@@ -142,7 +137,7 @@
                 </div>
             </div>
         </div>
-        <a href="javascript:location.reload()" class="back">← Выйти из игры</a>
+        <a href="javascript:location.reload()" class="back">← Сменить уровень</a>
     </div>
 
     <script>
@@ -191,19 +186,19 @@
             let n1, n2, n3 = 0, res;
             
             if (difficulty === 'easy') {
-                n1 = Math.floor(Math.random() * 15) + 1;
-                n2 = Math.floor(Math.random() * 10) + 1;
+                n1 = Math.floor(Math.random() * 9) + 1; // однозначное до 10
+                n2 = Math.floor(Math.random() * 90) + 10; // двузначное до 100
                 res = n1 + n2;
                 document.getElementById('q-text').innerText = `${n1} + ${n2}`;
             } else if (difficulty === 'medium') {
-                n1 = Math.floor(Math.random() * 60) + 10;
-                n2 = Math.floor(Math.random() * 35) + 5;
+                n1 = Math.floor(Math.random() * 90) + 10; // двузначное
+                n2 = Math.floor(Math.random() * 90) + 10; // двузначное
                 res = n1 + n2;
                 document.getElementById('q-text').innerText = `${n1} + ${n2}`;
             } else {
-                n1 = Math.floor(Math.random() * 40) + 5;
-                n2 = Math.floor(Math.random() * 30) + 5;
-                n3 = Math.floor(Math.random() * 20) + 2;
+                n1 = Math.floor(Math.random() * 101);
+                n2 = Math.floor(Math.random() * 101);
+                n3 = Math.floor(Math.random() * 101);
                 res = n1 + n2 + n3;
                 document.getElementById('q-text').innerText = `${n1} + ${n2} + ${n3}`;
             }
@@ -213,7 +208,7 @@
             let variants = [res];
             while(variants.length < 4) {
                 let v = res + (Math.floor(Math.random() * 14) - 7);
-                if (v > 0 && !variants.includes(v)) variants.push(v);
+                if (v >= 0 && !variants.includes(v)) variants.push(v);
             }
             variants.sort(() => Math.random() - 0.5);
 
@@ -245,7 +240,6 @@
                     if(parseInt(b.innerText) === correct) b.classList.add('correct');
                 });
             }
-
             showSolution();
         }
 
@@ -254,7 +248,9 @@
             const {n1, n2, n3, res} = currentQ;
             
             if (difficulty === 'hard') {
-                solText.innerHTML = `<b>Решение:</b><br>1. Сложим первые два: ${n1} + ${n2} = ${n1+n2}<br>2. Прибавим третье: ${n1+n2} + ${n3} = <b>${res}</b>`;
+                solText.innerHTML = `<b>Решение:</b><br>1. Складываем первые два: ${n1} + ${n2} = ${n1+n2}<br>2. Прибавляем третье: ${n1+n2} + ${n3} = <b>${res}</b>`;
+            } else if (difficulty === 'easy') {
+                solText.innerHTML = `<b>Решение:</b><br>К числу ${n2} прибавляем ${n1}:<br> ${n2} + ${n1} = <b>${res}</b>`;
             } else {
                 const d1 = Math.floor(n1/10)*10, e1 = n1%10;
                 const d2 = Math.floor(n2/10)*10, e2 = n2%10;
