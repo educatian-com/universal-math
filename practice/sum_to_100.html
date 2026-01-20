@@ -12,6 +12,8 @@
             --s-card: #ffffff;
             --s-text: #1d1d1f;
             --radius: 35px;
+            --s-green: #4caf50;
+            --s-red: #ff5252;
         }
 
         body {
@@ -23,9 +25,10 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Экран выбора сложности */
+        /* Меню выбора уровня */
         #setup-screen {
             display: flex;
             flex-direction: column;
@@ -59,29 +62,27 @@
         .progress-line { width: 100%; height: 8px; background: #e0e4e9; border-radius: 10px; overflow: hidden; }
         #bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--s-blue), var(--s-purple)); transition: 0.6s; }
 
-        .game-area { position: relative; width: 90%; max-width: 380px; margin-top: 30px; }
+        .game-area { width: 90%; max-width: 380px; margin-top: 30px; }
         
         .main-card {
             background: white;
             border-radius: var(--radius);
             padding: 40px 20px;
-            box-sizing: border-box;
             box-shadow: 0 20px 45px rgba(0,0,0,0.08);
             text-align: center;
         }
 
-        .question { font-size: 2.2em; font-weight: 900; color: var(--s-blue); margin-bottom: 30px; }
+        .question { font-size: 2.5em; font-weight: 900; color: var(--s-blue); margin-bottom: 30px; }
 
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .opt {
             background: #f2f4f7; border: none; padding: 22px; border-radius: 26px;
             font-size: 1.2em; font-weight: 700; cursor: pointer; transition: 0.2s;
-            color: var(--s-text);
         }
-        .opt.correct { background: #4caf50 !important; color: white !important; }
-        .opt.wrong { background: #ff5252 !important; color: white !important; animation: shake 0.3s; }
+        .opt.correct { background: var(--s-green) !important; color: white !important; }
+        .opt.wrong { background: var(--s-red) !important; color: white !important; animation: shake 0.3s; }
 
-        /* Блок управления после ответа */
+        /* Блок после ответа */
         #after-answer {
             display: none;
             margin-top: 25px;
@@ -92,34 +93,43 @@
 
         .action-btn {
             background: #f2f4f7; border: none; padding: 18px; border-radius: 22px;
-            font-size: 1em; font-weight: 700; cursor: pointer; color: var(--s-text);
-            transition: 0.2s;
+            font-size: 1em; font-weight: 700; cursor: pointer;
         }
 
         .next-btn { background: var(--s-blue); color: white; }
 
-        /* Скрытый текст решения */
+        /* Подробное решение */
         #solution-box {
             display: none;
             text-align: left;
-            font-size: 0.95em;
+            font-size: 1em;
             line-height: 1.6;
-            color: #444;
             margin-top: 15px;
             background: #f9f9f9;
             padding: 20px;
             border-radius: 25px;
-            animation: slideDown 0.3s;
+            border-left: 6px solid var(--s-purple);
         }
 
+        .step-circle {
+            display: inline-block; width: 22px; height: 22px; background: var(--s-purple);
+            color: white; border-radius: 50%; text-align: center; line-height: 22px;
+            font-size: 0.8em; font-weight: 800; margin-right: 8px;
+        }
+
+        .math-row { display: flex; justify-content: space-between; margin-bottom: 5px; border-bottom: 1px dashed #ddd; }
+        .res-highlight { color: var(--s-blue); font-weight: 800; }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
 
         .back { margin-top: auto; margin-bottom: 40px; text-decoration: none; color: #888; font-weight: 700; padding: 20px; }
     </style>
 </head>
 <body>
+
+    <audio id="snd-success" src="success.mp3" preload="auto"></audio>
+    <audio id="snd-error" src="error.mp3" preload="auto"></audio>
 
     <div id="setup-screen">
         <h1 style="text-align: center; margin-bottom: 30px;">Сложение</h1>
@@ -132,7 +142,7 @@
     <div id="game-screen">
         <div class="game-header">
             <div class="stats">
-                <span id="level-title">Легкий</span>
+                <span id="level-title">...</span>
                 <span id="score-val">0/10</span>
             </div>
             <div class="progress-line"><div id="bar"></div></div>
@@ -159,23 +169,10 @@
         let difficulty = 'easy';
         let currentQ = {};
 
-        function playSound(type) {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const g = ctx.createGain();
-            osc.type = 'sine';
-            if (type === 'win') {
-                osc.frequency.setValueAtTime(880, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
-            } else {
-                osc.frequency.setValueAtTime(150, ctx.currentTime);
-            }
-            g.gain.setValueAtTime(0.1, ctx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.2);
-            osc.connect(g);
-            g.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.2);
+        function playSound(isWin) {
+            const sound = document.getElementById(isWin ? 'snd-success' : 'snd-error');
+            sound.currentTime = 0; // Сброс в начало
+            sound.play().catch(e => console.log("Нужен клик для активации звука"));
         }
 
         function startGame(lvl) {
@@ -189,40 +186,36 @@
 
         function next() {
             if (step >= total) {
-                document.querySelector('.main-card').innerHTML = "<h2>🎉 Поздравляем!</h2><p>Уровень пройден.</p><button onclick='location.reload()' class='opt' style='width:100%; background:var(--s-blue); color:white;'>В меню</button>";
+                document.querySelector('.main-card').innerHTML = "<h2>🎉 Готово!</h2><p>Уровень пройден.</p><button onclick='location.reload()' class='opt' style='width:100%; background:var(--s-blue); color:white;'>В меню</button>";
                 return;
             }
-            
             document.getElementById('after-answer').style.display = 'none';
             document.getElementById('solution-box').style.display = 'none';
-            document.getElementById('show-sol-btn').innerText = 'Посмотреть решение';
             document.getElementById('opt-box').style.pointerEvents = 'auto';
 
             let n1, n2, n3 = 0, res;
-            
             if (difficulty === 'easy') {
                 n1 = Math.floor(Math.random() * 9) + 1;
                 n2 = Math.floor(Math.random() * 90) + 10;
                 res = n1 + n2;
                 document.getElementById('q-text').innerText = `${n1} + ${n2}`;
             } else if (difficulty === 'medium') {
-                n1 = Math.floor(Math.random() * 90) + 10;
-                n2 = Math.floor(Math.random() * 90) + 10;
+                n1 = Math.floor(Math.random() * 80) + 11;
+                n2 = Math.floor(Math.random() * 80) + 11;
                 res = n1 + n2;
                 document.getElementById('q-text').innerText = `${n1} + ${n2}`;
             } else {
-                n1 = Math.floor(Math.random() * 101);
-                n2 = Math.floor(Math.random() * 101);
-                n3 = Math.floor(Math.random() * 101);
+                n1 = Math.floor(Math.random() * 50) + 5;
+                n2 = Math.floor(Math.random() * 40) + 5;
+                n3 = Math.floor(Math.random() * 30) + 2;
                 res = n1 + n2 + n3;
                 document.getElementById('q-text').innerText = `${n1} + ${n2} + ${n3}`;
             }
 
             currentQ = {n1, n2, n3, res};
-            
             let variants = [res];
             while(variants.length < 4) {
-                let v = res + (Math.floor(Math.random() * 14) - 7);
+                let v = res + (Math.floor(Math.random() * 10) - 5);
                 if (v >= 0 && !variants.includes(v)) variants.push(v);
             }
             variants.sort(() => Math.random() - 0.5);
@@ -245,18 +238,17 @@
             
             if (val === correct) {
                 btn.classList.add('correct');
-                playSound('win');
+                playSound(true);
                 step++;
                 document.getElementById('score-val').innerText = `${step}/${total}`;
                 document.getElementById('bar').style.width = (step/total*100) + '%';
                 solBtn.innerText = 'Посмотреть решение';
             } else {
                 btn.classList.add('wrong');
-                playSound('lose');
+                playSound(false);
                 Array.from(document.querySelectorAll('.opt')).forEach(b => {
                     if(parseInt(b.innerText) === correct) b.classList.add('correct');
                 });
-                // Предлагаем решение при ошибке
                 solBtn.innerText = 'Посмотреть, как правильно?';
             }
 
@@ -269,26 +261,29 @@
             const {n1, n2, n3, res} = currentQ;
             
             if (difficulty === 'hard') {
-                solBox.innerHTML = `<b>Разбор:</b><br>1. Сначала: ${n1} + ${n2} = ${n1+n2}<br>2. Затем: ${n1+n2} + ${n3} = <b>${res}</b>`;
-            } else if (difficulty === 'easy') {
-                solBox.innerHTML = `<b>Разбор:</b><br>К числу ${n2} прибавляем ${n1}:<br> ${n2} + ${n1} = <b>${res}</b>`;
+                solBox.innerHTML = `
+                    <div style="font-weight:800; margin-bottom:15px; color:var(--s-blue)">Разбор по шагам:</div>
+                    <div class="math-row"><span class="step-circle">1</span> Сложим: ${n1} + ${n2} <span class="res-highlight">= ${n1+n2}</span></div>
+                    <div class="math-row"><span class="step-circle">2</span> Прибавим: ${n1+n2} + ${n3} <span class="res-highlight">= ${res}</span></div>
+                    <div style="margin-top:10px; font-weight:800; text-align:right">Итого: ${res}</div>
+                `;
             } else {
                 const d1 = Math.floor(n1/10)*10, e1 = n1%10;
                 const d2 = Math.floor(n2/10)*10, e2 = n2%10;
-                solBox.innerHTML = `<b>Разбор:</b><br>Десятки: ${d1} + ${d2} = ${d1+d2}<br>Единицы: ${e1} + ${e2} = ${e1+e2}<br>Итого: ${d1+d2} + ${e1+e2} = <b>${res}</b>`;
+                solBox.innerHTML = `
+                    <div style="font-weight:800; margin-bottom:15px; color:var(--s-blue)">Как решить быстро:</div>
+                    <div class="math-row"><span class="step-circle">1</span> Десятки: ${d1} + ${d2} <span class="res-highlight">= ${d1+d2}</span></div>
+                    <div class="math-row"><span class="step-circle">2</span> Единицы: ${e1} + ${e2} <span class="res-highlight">= ${e1+e2}</span></div>
+                    <div class="math-row"><span class="step-circle">3</span> Всего: ${d1+d2} + ${e1+e2} <span class="res-highlight">= ${res}</span></div>
+                    <div style="margin-top:10px; font-weight:800; text-align:right">Ответ: ${res}</div>
+                `;
             }
         }
 
         function toggleSolution() {
             const box = document.getElementById('solution-box');
-            const btn = document.getElementById('show-sol-btn');
-            if (box.style.display === 'block') {
-                box.style.display = 'none';
-                btn.innerText = (btn.getAttribute('data-wrong') === 'true') ? 'Посмотреть, как правильно?' : 'Посмотреть решение';
-            } else {
-                box.style.display = 'block';
-                btn.innerText = 'Скрыть решение';
-            }
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+            if (box.style.display === 'block') document.getElementById('show-sol-btn').innerText = 'Скрыть';
         }
     </script>
 </body>
