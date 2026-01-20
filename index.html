@@ -23,25 +23,23 @@
             overflow-x: hidden;
         }
 
-        /* Эффект размытия и отдаления контента */
+        /* Эффект размытия фона */
         #main-content {
-            transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.menu-open #main-content {
             filter: blur(10px);
-            transform: scale(0.96); /* Контент как бы уходит на задний план */
             pointer-events: none;
         }
 
-        /* Затемнение фона */
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.1);
+            background: rgba(0,0,0,0.15);
             opacity: 0;
             visibility: hidden;
             transition: 0.4s;
@@ -52,7 +50,6 @@
             visibility: visible;
         }
 
-        /* Шапка */
         header {
             background: linear-gradient(135deg, var(--s-blue) 0%, var(--s-purple) 100%);
             padding: 18px 25px;
@@ -69,62 +66,52 @@
         .logo { font-weight: 800; font-size: 1.4em; letter-spacing: -1px; }
 
         .burger { cursor: pointer; display: flex; flex-direction: column; gap: 6px; z-index: 1100; }
-        .burger span { display: block; width: 26px; height: 3px; background: white; border-radius: 10px; transition: 0.3s; }
+        .burger span { display: block; width: 26px; height: 3px; background: white; border-radius: 10px; }
 
-        /* Анимация бургера */
-        body.menu-open .burger span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-        body.menu-open .burger span:nth-child(2) { opacity: 0; }
-        body.menu-open .burger span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
-
-        /* Навигация Samsung S25 Style */
+        /* Меню в стиле Samsung */
         nav {
             position: fixed;
             top: 0;
             right: -100%;
-            width: 82%;
+            width: 85%;
             max-width: 320px;
             height: 100%;
-            background: #f4f6f9; /* Светло-серый фон меню */
+            background: #f0f2f5; /* Светлая подложка */
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            padding: 100px 15px 0 15px; /* Боковые отступы для формы карточек */
+            padding: 90px 15px 0 15px; /* Отступы, чтобы карточки не липли к краям */
+            gap: 2px; /* Почти нет расстояния, но разделение заметно */
             z-index: 1050;
-            box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
             border-radius: 40px 0 0 40px;
         }
 
         nav.active { right: 0; }
 
-        /* Оформление ссылок как подсвеченных блоков */
+        /* Каждый раздел как отдельный блок с тенью */
         nav a {
             display: flex;
             align-items: center;
             gap: 15px;
             text-decoration: none;
             color: var(--s-text);
-            font-size: 1.25em;
-            font-weight: 600;
-            padding: 20px 25px;
-            margin: 0; /* Без отступов между ними */
-            background: #ffffff; /* Белая "подсветка" каждого блока */
-            border-bottom: 1px solid #f0f0f0; /* Тонкая линия разделитель */
+            font-size: 1.25rem; /* Крупный шрифт */
+            font-weight: 700;
+            padding: 20px;
+            background: white; /* Фон раздела */
             transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); /* Тень для выделения */
         }
 
-        /* Скругления для создания эффекта единой капсулы */
-        nav a:first-child {
-            border-radius: 25px 25px 0 0;
-        }
-        
-        nav a:last-child {
-            border-radius: 0 0 25px 25px;
-            border-bottom: none;
-        }
+        /* Скругления первого и последнего пунктов для эффекта монолитного блока */
+        nav a:first-child { border-top-left-radius: 25px; border-top-right-radius: 25px; }
+        nav a:last-child { border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; }
 
-        nav a:active {
-            background: #f9f9f9;
-            transform: scale(0.98);
+        nav a:active { 
+            background: #fafafa; 
+            transform: scale(0.98); 
+            box-shadow: none;
         }
 
         .icon-box {
@@ -133,16 +120,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f0f2f5;
-            border-radius: 14px;
+            background: #f8f9fa;
+            border-radius: 12px;
             font-size: 1.4rem;
             flex-shrink: 0;
         }
 
-        /* Основные блоки контента */
+        /* Стили контента */
         .section { display: none; padding: 25px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.4s; }
         .section.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         .card {
@@ -151,11 +137,8 @@
             border-radius: var(--radius);
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             text-align: center;
-            margin-bottom: 20px;
         }
 
-        h1 { font-size: 2em; margin-bottom: 15px; letter-spacing: -1px; }
-        
         .btn {
             background: var(--s-blue);
             color: white;
@@ -166,7 +149,7 @@
             cursor: pointer;
             width: 100%;
             font-size: 1em;
-            transition: 0.3s;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -185,20 +168,15 @@
     <a href="#" onclick="showSection('home')">
         <div class="icon-box">🏠</div> <span>Главная</span>
     </a>
-    
     <a href="topics/theory_main.html">
         <div class="icon-box">📚</div> <span>Теория</span>
     </a>
-
     <a href="#" onclick="showSection('formulas')">
         <div class="icon-box">📐</div> <span>Формулы</span>
     </a>
-    
     <a href="practice/practice_main.html">
-        <div class="icon-box" style="background: #e9fbee;">🧩</div>
-        <span>Практика</span>
+        <div class="icon-box" style="background: #e9fbee;">🧩</div> <span>Практика</span>
     </a>
-
     <a href="#" onclick="showSection('calc')">
         <div class="icon-box">🧮</div> <span>Калькуляторы</span>
     </a>
@@ -212,27 +190,21 @@
             <button class="btn" onclick="toggleMenu()">Открыть меню</button>
         </div>
     </div>
-
     <div id="formulas" class="section"><div class="card"><h2>Формулы</h2><p>Раздел наполняется...</p></div></div>
     <div id="calc" class="section"><div class="card"><h2>Калькуляторы</h2><p>Раздел наполняется...</p></div></div>
 </div>
 
 <script>
     function toggleMenu() {
-        const menu = document.getElementById('menu');
-        const body = document.body;
-        menu.classList.toggle('active');
-        body.classList.toggle('menu-open');
+        document.getElementById('menu').classList.toggle('active');
+        document.body.classList.toggle('menu-open');
     }
 
     function showSection(id) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        
-        // Закрываем меню при переходе
         document.getElementById('menu').classList.remove('active');
         document.body.classList.remove('menu-open');
-        
         window.scrollTo(0,0);
     }
 </script>
