@@ -82,12 +82,11 @@
             width: 85%;
             max-width: 320px;
             height: 100%;
-            background: rgba(255, 255, 255, 0.98);
+            background: #f0f2f5; /* Слегка серый фон подложки, чтобы тени были видны лучше */
             backdrop-filter: blur(20px);
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            /* ИСПРАВЛЕНО: Уменьшили отступ сверху с 100px до 60px */
             padding: 60px 0 0 0; 
             z-index: 1050;
             box-shadow: -10px 0 30px rgba(0,0,0,0.1);
@@ -96,7 +95,7 @@
 
         nav.active { right: 0; }
 
-        /* Ссылки в меню (Монолитные блоки с тенями) */
+        /* Ссылки в меню (Разделы с тенями) */
         nav a {
             display: flex;
             align-items: center;
@@ -106,18 +105,20 @@
             font-size: 1.25em;
             font-weight: 700;
             padding: 22px 30px; 
-            margin: 0; 
+            margin-bottom: 2px; /* ОТСТУП ДЛЯ ТЕНИ */
             background: #ffffff;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
             transition: 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03); 
+            /* Тень под каждым разделом */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
         }
 
-        nav a:first-child { border-top: 1px solid rgba(0,0,0,0.05); }
+        /* Убираем лишние линии, так как тени теперь заменяют их */
+        nav a { border: none !important; }
 
         nav a:active { 
             background: #f5f5f5; 
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transform: scale(0.99);
         }
 
         .icon-box {
