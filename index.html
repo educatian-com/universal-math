@@ -55,18 +55,19 @@
             position: fixed;
             top: 0; right: -100%;
             width: 85%; max-width: 320px; height: 100%;
-            background: #f0f2f5; 
+            background: #ffffff; 
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; flex-direction: column;
             padding: 60px 0 0 0; 
             z-index: 1050;
             box-shadow: -10px 0 30px rgba(0,0,0,0.1);
             border-radius: 40px 0 0 40px;
+            overflow-y: auto;
         }
 
         nav.active { right: 0; }
 
-        /* ИСПРАВЛЕННЫЕ РАЗДЕЛЫ С ТЕНЯМИ */
+        /* ЭФФЕКТ НАЛОЖЕНИЯ БЕЗ ГРАНИЦ */
         nav a {
             display: flex;
             align-items: center;
@@ -75,17 +76,17 @@
             color: var(--s-text);
             font-size: 1.25em;
             font-weight: 700;
-            padding: 22px 30px; 
+            padding: 24px 30px; 
             background: #ffffff;
-            margin-bottom: 6px; /* Увеличили зазор для видимости тени */
+            margin-bottom: 0; /* Убрали зазоры */
             position: relative;
-            transition: 0.2s;
-            /* Выраженная тень под каждым разделом */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transition: 0.3s;
+            /* Тень падает вниз на следующий элемент */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.07);
             border: none;
         }
 
-        /* Чтобы тени не перекрывались, каждый следующий блок должен быть "ниже" по слою */
+        /* Порядок слоев: верхние перекрывают нижние своими тенями */
         nav a:nth-child(1) { z-index: 5; }
         nav a:nth-child(2) { z-index: 4; }
         nav a:nth-child(3) { z-index: 3; }
@@ -93,9 +94,9 @@
         nav a:nth-child(5) { z-index: 1; }
 
         nav a:active { 
-            background: #f5f5f5; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-            transform: translateY(1px);
+            background: #f8f9fa; 
+            z-index: 10; /* При нажатии блок всплывает выше всех */
+            transform: scale(0.98);
         }
 
         .icon-box {
@@ -105,9 +106,14 @@
             font-size: 1.4rem; flex-shrink: 0;
         }
 
-        .section { display: none; padding: 25px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.4s; }
+        /* УБРАЛИ ВЫПРЫГИВАНИЕ (Анимация только через прозрачность) */
+        .section { display: none; padding: 25px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.5s ease-out; }
         .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
 
         .card {
             background: var(--s-card);
@@ -121,7 +127,9 @@
             background: var(--s-blue); color: white; border: none;
             padding: 18px; border-radius: 22px; font-weight: 700;
             cursor: pointer; width: 100%; font-size: 1em;
+            transition: 0.2s;
         }
+        .btn:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
