@@ -65,7 +65,7 @@
             margin-top: 30px;
         }
 
-        /* Эффект наслоения (карточки сзади) */
+        /* Эффект наслоения */
         .card-shadow-layer {
             position: absolute;
             background: white;
@@ -94,6 +94,13 @@
             border: none;
         }
 
+        /* Анимация встряски при ошибке */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
         .question {
             font-size: 2.5em;
             font-weight: 900;
@@ -102,7 +109,6 @@
             letter-spacing: -1.5px;
         }
 
-        /* Кнопки в стиле Samsung S25 */
         .options-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -168,37 +174,57 @@
         let step = 0;
         const total = 10;
         
-        // Функция звука (Samsung-style отклик)
-        function playTone(type) {
+        // Мощный аудио-движок S25
+        function playSound(type) {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const g = ctx.createGain();
             
             if (type === 'win') {
-                osc.frequency.setValueAtTime(880, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
+                // Динамичный двойной "дзынь"
+                [880, 1320].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const g = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.06);
+                    g.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.06);
+                    g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + i * 0.06 + 0.2);
+                    osc.connect(g);
+                    g.connect(ctx.destination);
+                    osc.start(ctx.currentTime + i * 0.06);
+                    osc.stop(ctx.currentTime + i * 0.06 + 0.2);
+                });
             } else {
-                osc.frequency.setValueAtTime(220, ctx.currentTime);
+                // Низкий вибрирующий звук ошибки
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(110, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(40, ctx.currentTime + 0.2);
+                g.gain.setValueAtTime(0.15, ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.2);
+                osc.connect(g);
+                g.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.2);
+                
+                // Эффект встряски карточки
+                const card = document.getElementById('card-box');
+                card.style.animation = 'none';
+                setTimeout(() => card.style.animation = 'shake 0.3s cubic-bezier(.36,.07,.19,.97)', 10);
             }
-
-            osc.type = 'sine';
-            g.gain.setValueAtTime(0.1, ctx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.15);
-            
-            osc.connect(g);
-            g.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.15);
         }
 
         function next() {
             if (step >= total) {
-                document.getElementById('card-box').innerHTML = "<h2 style='font-size:2em'>🎉 Отлично!</h2><p>Ты настоящий мастер сложения.</p><button onclick='location.reload()' style='background:var(--s-blue); color:white; border:none; padding:15px 30px; border-radius:20px; font-weight:700; margin-top:20px;'>Еще раз</button>";
+                document.getElementById('card-box').innerHTML = `
+                    <h2 style='font-size:2em; margin-top:0;'>🎉 Победа!</h2>
+                    <p>Ты отлично считаешь в уме!</p>
+                    <button onclick='location.reload()' style='background:var(--s-blue); color:white; border:none; padding:18px 30px; border-radius:22px; font-weight:700; cursor:pointer; width:100%; margin-top:10px;'>Играть еще раз</button>
+                `;
                 return;
             }
 
-            const n1 = Math.floor(Math.random() * 60) + 1;
-            const n2 = Math.floor(Math.random() * 39) + 1;
+            const n1 = Math.floor(Math.random() * 60) + 5;
+            const n2 = Math.floor(Math.random() * 30) + 5;
             const res = n1 + n2;
             
             document.getElementById('q-text').innerText = `${n1} + ${n2}`;
@@ -219,14 +245,14 @@
                 b.onclick = () => {
                     if (v === res) {
                         b.classList.add('correct');
-                        playTone('win');
+                        playSound('win');
                         step++;
                         document.getElementById('score-val').innerText = `${step}/${total}`;
                         document.getElementById('bar').style.width = (step/total*100) + '%';
                         setTimeout(next, 600);
                     } else {
                         b.classList.add('wrong');
-                        playTone('lose');
+                        playSound('lose');
                         setTimeout(() => b.classList.remove('wrong'), 400);
                     }
                 };
