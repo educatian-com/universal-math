@@ -20,6 +20,35 @@
             margin: 0;
             background-color: var(--s-bg);
             color: var(--s-text);
+            overflow-x: hidden;
+        }
+
+        /* Эффект размытия для контента */
+        #main-content {
+            transition: filter 0.4s ease, transform 0.4s ease;
+        }
+
+        body.menu-open #main-content {
+            filter: blur(8px); /* Размытие фона */
+            pointer-events: none; /* Чтобы нельзя было кликать сквозь меню */
+        }
+
+        /* Затемнение фона */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.4s;
+            z-index: 1040;
+        }
+        body.menu-open .overlay {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Шапка */
@@ -38,57 +67,64 @@
 
         .logo { font-weight: 800; font-size: 1.4em; letter-spacing: -1px; }
 
-        .burger { cursor: pointer; display: flex; flex-direction: column; gap: 6px; }
-        .burger span { display: block; width: 26px; height: 3px; background: white; border-radius: 10px; }
+        .burger { cursor: pointer; display: flex; flex-direction: column; gap: 6px; z-index: 1100; }
+        .burger span { display: block; width: 26px; height: 3px; background: white; border-radius: 10px; transition: 0.3s; }
+
+        /* Анимация бургера в крестик (опционально) */
+        body.menu-open .burger span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        body.menu-open .burger span:nth-child(2) { opacity: 0; }
+        body.menu-open .burger span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
         /* Навигация (Боковое меню) */
         nav {
             position: fixed;
             top: 0;
             right: -100%;
-            width: 300px;
+            width: 85%; /* Более удобно для мобильных */
+            max-width: 320px;
             height: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            padding: 80px 20px;
-            gap: 12px;
+            padding: 100px 0 0 0; /* Убрали боковые отступы для монолитности */
             z-index: 1050;
             box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            border-radius: 40px 0 0 40px; /* Скругление края меню как в One UI */
         }
 
         nav.active { right: 0; }
 
-        /* Стили для ссылок в меню, чтобы они были в ряд */
+        /* Ссылки в меню (Монолитные блоки) */
         nav a {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
             text-decoration: none;
             color: var(--s-text);
-            font-size: 1.1em;
-            font-weight: 700;
-            padding: 15px 20px;
-            background: #f8f9fa;
-            border-radius: 20px;
+            font-size: 1.25em; /* Шрифт крупнее */
+            font-weight: 600;
+            padding: 20px 30px; /* Больше область нажатия */
+            margin: 0; /* Убрали отступы между блоками */
+            border-bottom: 1px solid rgba(0,0,0,0.05); /* Тонкая разделительная линия */
             transition: 0.2s;
         }
 
-        nav a:active { transform: scale(0.96); background: #eee; }
+        nav a:first-child { border-top: 1px solid rgba(0,0,0,0.05); }
+
+        nav a:active { background: rgba(0, 0, 0, 0.05); }
 
         .icon-box {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: white;
-            border-radius: 12px;
-            font-size: 1.3rem;
+            background: #f0f2f5;
+            border-radius: 14px;
+            font-size: 1.4rem;
             flex-shrink: 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         /* Основные блоки */
@@ -120,11 +156,11 @@
             font-size: 1em;
             transition: 0.3s;
         }
-
-        .topic-card { text-align: left; border-left: 6px solid var(--s-blue); cursor: pointer; margin-bottom: 15px; }
     </style>
 </head>
 <body>
+
+<div class="overlay" onclick="toggleMenu()"></div>
 
 <header>
     <div class="logo">Universal Math</div>
@@ -148,7 +184,7 @@
     
     <a href="practice/practice_main.html">
         <div class="icon-box" style="background: #e9fbee;">🧩</div>
-        <span style="white-space: nowrap;">Практика</span>
+        <span>Практика</span>
     </a>
 
     <a href="#" onclick="showSection('calc')">
@@ -156,24 +192,36 @@
     </a>
 </nav>
 
-<div id="home" class="section active">
-    <div class="card">
-        <h1>Добро пожаловать</h1>
-        <p>Universal Math — это современный образовательный портал для изучения математики.</p>
-        <button class="btn" onclick="toggleMenu()">Открыть меню</button>
+<div id="main-content">
+    <div id="home" class="section active">
+        <div class="card">
+            <h1>Добро пожаловать</h1>
+            <p>Universal Math — это современный образовательный портал для изучения математики.</p>
+            <button class="btn" onclick="toggleMenu()">Открыть меню</button>
+        </div>
     </div>
+
+    <div id="formulas" class="section"><div class="card"><h2>Формулы</h2><p>Раздел наполняется...</p></div></div>
+    <div id="calc" class="section"><div class="card"><h2>Калькуляторы</h2><p>Раздел наполняется...</p></div></div>
 </div>
 
-<div id="formulas" class="section"><div class="card"><h2>Формулы</h2><p>Раздел наполняется...</p></div></div>
-<div id="calc" class="section"><div class="card"><h2>Калькуляторы</h2><p>Раздел наполняется...</p></div></div>
-
 <script>
-    function toggleMenu() { document.getElementById('menu').classList.toggle('active'); }
+    function toggleMenu() {
+        const menu = document.getElementById('menu');
+        const body = document.body;
+        
+        menu.classList.toggle('active');
+        body.classList.toggle('menu-open');
+    }
 
     function showSection(id) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        
+        // Закрываем меню при переходе
         document.getElementById('menu').classList.remove('active');
+        document.body.classList.remove('menu-open');
+        
         window.scrollTo(0,0);
     }
 </script>
