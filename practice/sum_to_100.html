@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сложение до 100 — Игра</title>
+    <title>Сложение — Universal Math</title>
     <style>
         :root {
             --s-blue: #035efc;
@@ -23,216 +23,188 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* Шапка с прогрессом */
-        .game-header {
+        /* Экран выбора сложности */
+        #setup-screen {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
             width: 90%;
-            max-width: 450px;
-            padding: 25px 0 10px 0;
+            max-width: 400px;
+            margin-top: 50px;
+            animation: fadeIn 0.5s;
         }
 
-        .stats {
+        .level-btn {
+            background: white;
+            border: none;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            font-size: 1.3em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: left;
             display: flex;
             justify-content: space-between;
-            font-weight: 800;
-            font-size: 1.1em;
-            margin-bottom: 12px;
+            align-items: center;
         }
 
-        .progress-line {
-            width: 100%;
-            height: 8px;
-            background: #e0e4e9;
-            border-radius: 10px;
-            overflow: hidden;
-        }
+        .level-btn:active { transform: scale(0.95); }
+        .level-btn span { font-size: 0.8em; color: var(--s-blue); opacity: 0.7; }
 
-        #bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--s-blue), var(--s-purple));
-            transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        /* Игровой экран */
+        #game-screen { display: none; width: 100%; flex-direction: column; align-items: center; }
 
-        /* Игровая зона со стопкой карточек */
-        .game-area {
-            position: relative;
-            width: 90%;
-            max-width: 380px;
-            height: 420px;
-            margin-top: 30px;
-        }
+        .game-header { width: 90%; max-width: 450px; padding: 25px 0 10px 0; }
+        .stats { display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 12px; }
+        .progress-line { width: 100%; height: 8px; background: #e0e4e9; border-radius: 10px; overflow: hidden; }
+        #bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--s-blue), var(--s-purple)); transition: 0.6s; }
 
-        /* Эффект наслоения */
-        .card-shadow-layer {
-            position: absolute;
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.04);
-            width: 100%;
-            height: 300px;
-            transition: 0.3s;
-        }
-
+        .game-area { position: relative; width: 90%; max-width: 380px; height: auto; min-height: 450px; margin-top: 30px; }
+        .card-shadow-layer { position: absolute; background: white; border-radius: var(--radius); width: 100%; height: 350px; }
         .layer-bottom { top: 20px; transform: scale(0.9); opacity: 0.4; z-index: 1; }
         .layer-middle { top: 10px; transform: scale(0.95); opacity: 0.7; z-index: 2; }
 
-        /* Главная карточка */
         .main-card {
-            position: absolute;
-            top: 0;
+            position: relative;
             width: 100%;
             background: white;
             border-radius: var(--radius);
-            padding: 45px 20px;
+            padding: 40px 20px;
             box-sizing: border-box;
             box-shadow: 0 20px 45px rgba(0,0,0,0.08);
             z-index: 3;
             text-align: center;
-            border: none;
         }
 
-        /* Анимация встряски при ошибке */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
+        .question { font-size: 2.5em; font-weight: 900; color: var(--s-blue); margin-bottom: 30px; }
 
-        .question {
-            font-size: 2.5em;
-            font-weight: 900;
-            margin-bottom: 35px;
-            color: var(--s-blue);
-            letter-spacing: -1.5px;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
+        /* Кнопки ответов */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
         .opt {
-            background: #f2f4f7;
-            border: none;
-            padding: 24px;
-            border-radius: 26px;
-            font-size: 1.25em;
-            font-weight: 700;
-            color: var(--s-text);
-            cursor: pointer;
-            transition: 0.2s cubic-bezier(0.2, 0, 0, 1);
+            background: #f2f4f7; border: none; padding: 22px; border-radius: 26px;
+            font-size: 1.2em; font-weight: 700; cursor: pointer; transition: 0.2s;
+        }
+        .opt.correct { background: #4caf50; color: white; }
+        .opt.wrong { background: #ff5252; color: white; animation: shake 0.3s; }
+
+        /* Подсказка/Решение */
+        .solution-btn {
+            background: none; border: 2px solid #eee; color: var(--s-gray);
+            padding: 12px; border-radius: 20px; width: 100%; font-weight: 700;
+            margin-top: 10px; cursor: pointer;
+        }
+        #solution-text {
+            display: none; margin-top: 15px; padding: 15px; background: #f9f9f9;
+            border-radius: 20px; font-size: 0.95em; line-height: 1.4; color: #555;
+            animation: fadeIn 0.3s;
         }
 
-        .opt:active {
-            transform: scale(0.92);
-            background: #e8eaed;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
 
-        .opt.correct { background: #4caf50; color: white; box-shadow: 0 8px 20px rgba(76,175,80,0.3); }
-        .opt.wrong { background: #ff5252; color: white; box-shadow: 0 8px 20px rgba(255,82,82,0.3); }
-
-        .back {
-            margin-top: auto;
-            margin-bottom: 40px;
-            text-decoration: none;
-            color: var(--s-gray);
-            font-weight: 700;
-            font-size: 0.95em;
-            padding: 10px;
-        }
+        .back { margin-top: auto; margin-bottom: 40px; text-decoration: none; color: #888; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <div class="game-header">
-        <div class="stats">
-            <span>Сложение до 100</span>
-            <span id="score-val">0/10</span>
-        </div>
-        <div class="progress-line">
-            <div id="bar"></div>
-        </div>
+    <div id="setup-screen">
+        <h1 style="text-align: center; margin-bottom: 20px;">Выбери сложность</h1>
+        <button class="level-btn" onclick="startGame(20)">Легко <span>0-20</span></button>
+        <button class="level-btn" onclick="startGame(50)">Средне <span>0-50</span></button>
+        <button class="level-btn" onclick="startGame(100)">Хард <span>0-100</span></button>
+        <a href="../index.html" style="text-align: center; color: var(--s-blue); text-decoration: none; font-weight: 700; margin-top: 20px;">Назад</a>
     </div>
 
-    <div class="game-area">
-        <div class="card-shadow-layer layer-bottom"></div>
-        <div class="card-shadow-layer layer-middle"></div>
-        
-        <div class="main-card" id="card-box">
-            <div class="question" id="q-text">0 + 0</div>
-            <div class="options-grid" id="opt-box"></div>
+    <div id="game-screen">
+        <div class="game-header">
+            <div class="stats">
+                <span id="level-name">Сложение</span>
+                <span id="score-val">0/10</span>
+            </div>
+            <div class="progress-line"><div id="bar"></div></div>
         </div>
-    </div>
 
-    <a href="../index.html" class="back">← На главную</a>
+        <div class="game-area">
+            <div class="card-shadow-layer layer-bottom"></div>
+            <div class="card-shadow-layer layer-middle"></div>
+            <div class="main-card" id="card-box">
+                <div class="question" id="q-text">...</div>
+                <div class="options-grid" id="opt-box"></div>
+                <button class="solution-btn" onclick="toggleSolution()">Посмотреть решение</button>
+                <div id="solution-text"></div>
+            </div>
+        </div>
+        <a href="javascript:location.reload()" class="back">← Сменить сложность</a>
+    </div>
 
     <script>
         let step = 0;
         const total = 10;
-        
-        // Мощный аудио-движок S25
+        let maxNum = 100;
+        let currentQ = {};
+
         function playSound(type) {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
             if (type === 'win') {
-                // Динамичный двойной "дзынь"
-                [880, 1320].forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const g = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.06);
-                    g.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.06);
-                    g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + i * 0.06 + 0.2);
-                    osc.connect(g);
-                    g.connect(ctx.destination);
-                    osc.start(ctx.currentTime + i * 0.06);
-                    osc.stop(ctx.currentTime + i * 0.06 + 0.2);
-                });
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
             } else {
-                // Низкий вибрирующий звук ошибки
-                const osc = ctx.createOscillator();
-                const g = ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(110, ctx.currentTime);
-                osc.frequency.linearRampToValueAtTime(40, ctx.currentTime + 0.2);
-                g.gain.setValueAtTime(0.15, ctx.currentTime);
-                g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.2);
-                osc.connect(g);
-                g.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.2);
-                
-                // Эффект встряски карточки
-                const card = document.getElementById('card-box');
-                card.style.animation = 'none';
-                setTimeout(() => card.style.animation = 'shake 0.3s cubic-bezier(.36,.07,.19,.97)', 10);
+                osc.frequency.setValueAtTime(150, ctx.currentTime);
+            }
+            osc.type = 'sine';
+            g.gain.setValueAtTime(0.1, ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.2);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.2);
+        }
+
+        function startGame(limit) {
+            maxNum = limit;
+            document.getElementById('setup-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'flex';
+            next();
+        }
+
+        function toggleSolution() {
+            const sol = document.getElementById('solution-text');
+            if (sol.style.display === 'block') {
+                sol.style.display = 'none';
+            } else {
+                const n1 = currentQ.n1;
+                const n2 = currentQ.n2;
+                // Генерируем простое объяснение
+                sol.innerHTML = `<b>Решение:</b><br>Разложим числа: ${n1} это ${Math.floor(n1/10)*10} + ${n1%10}. <br> Сложим десятки: ${Math.floor(n1/10)*10} + ${Math.floor(n2/10)*10}. <br> Затем прибавим остальное. Итого: <b>${n1+n2}</b>`;
+                sol.style.display = 'block';
             }
         }
 
         function next() {
             if (step >= total) {
-                document.getElementById('card-box').innerHTML = `
-                    <h2 style='font-size:2em; margin-top:0;'>🎉 Победа!</h2>
-                    <p>Ты отлично считаешь в уме!</p>
-                    <button onclick='location.reload()' style='background:var(--s-blue); color:white; border:none; padding:18px 30px; border-radius:22px; font-weight:700; cursor:pointer; width:100%; margin-top:10px;'>Играть еще раз</button>
-                `;
+                document.getElementById('card-box').innerHTML = "<h2>🎉 Готово!</h2><button onclick='location.reload()' class='opt' style='width:100%; background:var(--s-blue); color:white;'>Еще раз</button>";
                 return;
             }
-
-            const n1 = Math.floor(Math.random() * 60) + 5;
-            const n2 = Math.floor(Math.random() * 30) + 5;
+            document.getElementById('solution-text').style.display = 'none';
+            
+            const n1 = Math.floor(Math.random() * (maxNum/2)) + 5;
+            const n2 = Math.floor(Math.random() * (maxNum/2)) + 5;
+            currentQ = {n1, n2};
             const res = n1 + n2;
             
             document.getElementById('q-text').innerText = `${n1} + ${n2}`;
             
             let variants = [res];
             while(variants.length < 4) {
-                let v = res + (Math.floor(Math.random() * 20) - 10);
-                if (v > 0 && v <= 100 && !variants.includes(v)) variants.push(v);
+                let v = res + (Math.floor(Math.random() * 10) - 5);
+                if (v > 0 && !variants.includes(v)) variants.push(v);
             }
             variants.sort(() => Math.random() - 0.5);
 
@@ -253,14 +225,11 @@
                     } else {
                         b.classList.add('wrong');
                         playSound('lose');
-                        setTimeout(() => b.classList.remove('wrong'), 400);
                     }
                 };
                 box.appendChild(b);
             });
         }
-
-        next();
     </script>
 </body>
 </html>
