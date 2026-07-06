@@ -1,1 +1,401 @@
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренажер таблицы умножения</title>
+    <style>
+        :root {
+            --s-blue: #035efc;
+            --s-green: #34c759;
+            --s-red: #ff3b30;
+            --s-bg: #f2f4f7;
+            --s-card: #ffffff;
+            --s-text: #1d1d1f;
+            --radius: 30px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            background-color: var(--s-bg);
+            color: var(--s-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .trainer-container {
+            width: 90%;
+            max-width: 450px;
+            background: var(--s-card);
+            padding: 30px 25px;
+            border-radius: var(--radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Полоса таймера сверху карточки */
+        .timer-bar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: #e5e5ea;
+        }
+
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background: var(--s-blue);
+            transition: width 0.1s linear;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #8e8e93;
+        }
+
+        /* Экраны */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        h2 { font-size: 1.6rem; margin-bottom: 25px; letter-spacing: -0.5px; }
+
+        .btn {
+            background: #f0f2f5;
+            color: var(--s-text);
+            border: none;
+            padding: 20px;
+            border-radius: 22px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            transition: 0.2s;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn:active { transform: scale(0.97); }
+
+        .btn-difficulty[data-level="easy"] { border-left: 6px solid var(--s-green); }
+        .btn-difficulty[data-level="medium"] { border-left: 6px solid var(--s-blue); }
+        .btn-difficulty[data-level="hard"] { border-left: 6px solid var(--s-red); }
+
+        .question {
+            font-size: 3.8rem;
+            font-weight: 800;
+            margin: 15px 0;
+            letter-spacing: -2px;
+        }
+
+        .answer-input {
+            width: 100%;
+            box-sizing: border-box;
+            border: 2px solid #e5e5ea;
+            border-radius: 20px;
+            padding: 18px;
+            font-size: 1.6rem;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 20px;
+            outline: none;
+            transition: 0.2s;
+            background: #f8f9fa;
+        }
+
+        .answer-input:focus {
+            border-color: var(--s-blue);
+            background: #fff;
+        }
+
+        .btn-check {
+            background: var(--s-blue);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 22px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+
+        /* Результаты */
+        .result-score {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--s-blue);
+            margin: 20px 0;
+        }
+        .result-details {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #8e8e93;
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: #8e8e93;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="trainer-container">
+    <!-- ТАЙМЕР -->
+    <div class="timer-bar-container" id="timer-wrapper" style="display: none;">
+        <div class="timer-bar" id="timer-bar"></div>
+    </div>
+
+    <!-- ЭКРАН 1: ВЫБОР СЛОЖНОСТИ -->
+    <div id="screen-start" class="screen active">
+        <h2>Выбери уровень сложности</h2>
+        <button class="btn btn-difficulty" onclick="startGame('easy')">
+            <span>👶 Легкий</span> <small>Числа 2-5 • 30 сек</small>
+        </button>
+        <button class="btn btn-difficulty" onclick="startGame('medium')">
+            <span>🧠 Средний</span> <small>Числа 2-9 • 30 сек</small>
+        </button>
+        <button class="btn btn-difficulty" onclick="startGame('hard')">
+            <span>🔥 Профи</span> <small>Числа 10-19 • 30 сек</small>
+        </button>
+        <a href="practice_main.html" class="back-link">← В меню практики</a>
+    </div>
+
+    <!-- ЭКРАН 2: ИГРА -->
+    <div id="screen-game" class="screen">
+        <div class="stats">
+            <div class="total">Осталось времени: <span id="time-text">30</span>с</div>
+            <div class="total">Пример: <span id="total">1</span></div>
+        </div>
+
+        <div class="question" id="question">0 × 0</div>
+
+        <input type="number" id="answer" class="answer-input" placeholder="Ответ" inputmode="numeric" autocomplete="off">
+        
+        <button class="btn-check" id="check-btn" onclick="submitAnswer()">Далее</button>
+        <div class="back-link" onclick="exitGame()">← Выйти</div>
+    </div>
+
+    <!-- ЭКРАН 3: РЕЗУЛЬТАТЫ -->
+    <div id="screen-results" class="screen">
+        <h2>Тест завершен!</h2>
+        <div class="result-score" id="res-percent">0%</div>
+        <div class="result-details" id="res-text">Вы ответили правильно на 0 из 0 задач.</div>
+        <button class="btn-check" onclick="toStartScreen()">Повторить тест</button>
+        <a href="practice_main.html" class="back-link">← В меню практики</a>
+    </div>
+</div>
+
+<script>
+    let num1, num2, correctAnswer;
+    let score = 0;
+    let totalQuestions = 0;
+    let currentLevel = 'medium';
+    
+    let timerInterval;
+    let timeLeft;
+    let lastSecondInt = 30; 
+    const maxTime = 30;
+
+    // Инициализация аудио-контекста
+    let audioCtx = null;
+
+    function playTickSound(isUrgent) {
+        try {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            let osc = audioCtx.createOscillator();
+            let gainNode = audioCtx.createGain();
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            if (isUrgent) {
+                // Высокий предупреждающий писк на последних секундах
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime); 
+                gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } else {
+                // Короткий глухой механический щелчок ("тик")
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime); 
+                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.04);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            }
+        } catch (e) {
+            console.log("Аудио не поддерживается или заблокировано браузером");
+        }
+    }
+
+    function playFinishSound() {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            let osc = audioCtx.createOscillator();
+            let gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.3);
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.4);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        } catch(e){}
+    }
+
+    function startGame(level) {
+        currentLevel = level;
+        score = 0;
+        totalQuestions = 0;
+        timeLeft = maxTime;
+        lastSecondInt = maxTime;
+
+        // Активируем аудио-контекст по клику (требование безопасности современных браузеров)
+        if (window.AudioContext || window.webkitAudioContext) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        document.getElementById('total').innerText = totalQuestions + 1;
+        document.getElementById('screen-start').classList.remove('active');
+        document.getElementById('screen-game').classList.add('active');
+        document.getElementById('timer-wrapper').style.display = 'block';
+
+        generateQuestion();
+        startTimer();
+    }
+
+    function toStartScreen() {
+        document.getElementById('screen-results').classList.remove('active');
+        document.getElementById('screen-start').classList.add('active');
+    }
+
+    function exitGame() {
+        clearInterval(timerInterval);
+        document.getElementById('timer-wrapper').style.display = 'none';
+        document.getElementById('screen-game').classList.remove('active');
+        document.getElementById('screen-start').classList.add('active');
+    }
+
+    function generateQuestion() {
+        if (currentLevel === 'easy') {
+            num1 = Math.floor(Math.random() * 4) + 2; 
+            num2 = Math.floor(Math.random() * 4) + 2; 
+        } else if (currentLevel === 'medium') {
+            num1 = Math.floor(Math.random() * 8) + 2; 
+            num2 = Math.floor(Math.random() * 8) + 2;
+        } else {
+            num1 = Math.floor(Math.random() * 10) + 10; 
+            num2 = Math.floor(Math.random() * 8) + 2;   
+        }
+
+        correctAnswer = num1 * num2;
+
+        document.getElementById('question').innerText = `${num1} × ${num2}`;
+        document.getElementById('answer').value = '';
+        document.getElementById('answer').focus();
+    }
+
+    function startTimer() {
+        const timerBar = document.getElementById('timer-bar');
+        timerBar.style.width = '100%';
+        timerBar.style.backgroundColor = 'var(--s-blue)';
+
+        timerInterval = setInterval(() => {
+            timeLeft -= 0.1;
+            if (timeLeft < 0) timeLeft = 0;
+
+            const percentage = (timeLeft / maxTime) * 100;
+            timerBar.style.width = `${percentage}%`;
+            
+            let currentSecondCeil = Math.ceil(timeLeft);
+            document.getElementById('time-text').innerText = currentSecondCeil;
+
+            // Воспроизводим звук каждую смену секунды
+            if (currentSecondCeil < lastSecondInt && currentSecondCeil > 0) {
+                lastSecondInt = currentSecondCeil;
+                // Последние 5 секунд пищат тревожнее
+                playTickSound(currentSecondCeil <= 5);
+            }
+
+            if (timeLeft <= 5) {
+                timerBar.style.backgroundColor = 'var(--s-red)';
+            }
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                endGame();
+            }
+        }, 100);
+    }
+
+    function submitAnswer() {
+        const inputField = document.getElementById('answer');
+        const userAnswer = parseInt(inputField.value);
+
+        if (isNaN(userAnswer)) {
+            return; 
+        }
+
+        totalQuestions++;
+
+        if (userAnswer === correctAnswer) {
+            score++;
+        }
+
+        document.getElementById('total').innerText = totalQuestions + 1;
+        generateQuestion();
+    }
+
+    function endGame() {
+        playFinishSound();
+        document.getElementById('timer-wrapper').style.display = 'none';
+        document.getElementById('screen-game').classList.remove('active');
+        document.getElementById('screen-results').classList.add('active');
+
+        const percent = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+        
+        document.getElementById('res-percent').innerText = `${percent}%`;
+        document.getElementById('res-text').innerText = `Вы правильно ответили на ${score} из ${totalQuestions} примеров.`;
+    }
+
+    document.getElementById('answer').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            submitAnswer();
+        }
+    });
+</script>
+
+</body>
+</html>
