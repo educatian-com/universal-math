@@ -71,6 +71,7 @@
 
         h2 { font-size: 1.6rem; margin-bottom: 25px; letter-spacing: -0.5px; }
 
+        /* Кнопки выбора уровня сложности */
         .btn {
             background: #f0f2f5;
             color: var(--s-text);
@@ -80,17 +81,16 @@
             font-weight: 700;
             cursor: pointer;
             width: 100%;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 12px;
             transition: 0.2s;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center; /* Текст строго по центру */
+            display: block;
         }
 
         .btn:active { transform: scale(0.97); }
 
+        /* Цветовые полоски слева для лаконичного индикатора */
         .btn-difficulty[data-level="easy"] { border-left: 6px solid var(--s-green); }
         .btn-difficulty[data-level="medium"] { border-left: 6px solid var(--s-blue); }
         .btn-difficulty[data-level="hard"] { border-left: 6px solid var(--s-red); }
@@ -162,27 +162,24 @@
 <body>
 
 <div class="trainer-container">
-    <!-- ТАЙМЕР -->
     <div class="timer-bar-container" id="timer-wrapper" style="display: none;">
         <div class="timer-bar" id="timer-bar"></div>
     </div>
 
-    <!-- ЭКРАН 1: ВЫБОР СЛОЖНОСТИ -->
     <div id="screen-start" class="screen active">
         <h2>Выбери уровень сложности</h2>
-        <button class="btn btn-difficulty" onclick="startGame('easy')">
-            <span>👶 Легкий</span> <small>Числа 2-5 • 30 сек</small>
+        <button class="btn btn-difficulty" data-level="easy" onclick="startGame('easy')">
+            Легкий
         </button>
-        <button class="btn btn-difficulty" onclick="startGame('medium')">
-            <span>🧠 Средний</span> <small>Числа 2-9 • 30 сек</small>
+        <button class="btn btn-difficulty" data-level="medium" onclick="startGame('medium')">
+            Средний
         </button>
-        <button class="btn btn-difficulty" onclick="startGame('hard')">
-            <span>🔥 Профи</span> <small>Числа 10-19 • 30 сек</small>
+        <button class="btn btn-difficulty" data-level="hard" onclick="startGame('hard')">
+            Профи
         </button>
         <a href="practice_main.html" class="back-link">← В меню практики</a>
     </div>
 
-    <!-- ЭКРАН 2: ИГРА -->
     <div id="screen-game" class="screen">
         <div class="stats">
             <div class="total">Осталось времени: <span id="time-text">30</span>с</div>
@@ -197,7 +194,6 @@
         <div class="back-link" onclick="exitGame()">← Выйти</div>
     </div>
 
-    <!-- ЭКРАН 3: РЕЗУЛЬТАТЫ -->
     <div id="screen-results" class="screen">
         <h2>Тест завершен!</h2>
         <div class="result-score" id="res-percent">0%</div>
@@ -218,7 +214,6 @@
     let lastSecondInt = 30; 
     const maxTime = 30;
 
-    // Инициализация аудио-контекста
     let audioCtx = null;
 
     function playTickSound(isUrgent) {
@@ -226,15 +221,12 @@
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
-            
             let osc = audioCtx.createOscillator();
             let gainNode = audioCtx.createGain();
-            
             osc.connect(gainNode);
             gainNode.connect(audioCtx.destination);
             
             if (isUrgent) {
-                // Высокий предупреждающий писк на последних секундах
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(800, audioCtx.currentTime); 
                 gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
@@ -242,7 +234,6 @@
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.15);
             } else {
-                // Короткий глухой механический щелчок ("тик")
                 osc.type = 'triangle';
                 osc.frequency.setValueAtTime(150, audioCtx.currentTime); 
                 gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
@@ -250,9 +241,7 @@
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.05);
             }
-        } catch (e) {
-            console.log("Аудио не поддерживается или заблокировано браузером");
-        }
+        } catch (e) {}
     }
 
     function playFinishSound() {
@@ -281,7 +270,6 @@
         timeLeft = maxTime;
         lastSecondInt = maxTime;
 
-        // Активируем аудио-контекст по клику (требование безопасности современных браузеров)
         if (window.AudioContext || window.webkitAudioContext) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
@@ -341,10 +329,8 @@
             let currentSecondCeil = Math.ceil(timeLeft);
             document.getElementById('time-text').innerText = currentSecondCeil;
 
-            // Воспроизводим звук каждую смену секунды
             if (currentSecondCeil < lastSecondInt && currentSecondCeil > 0) {
                 lastSecondInt = currentSecondCeil;
-                // Последние 5 секунд пищат тревожнее
                 playTickSound(currentSecondCeil <= 5);
             }
 
